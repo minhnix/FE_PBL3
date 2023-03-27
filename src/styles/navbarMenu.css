@@ -1,0 +1,22 @@
+.navbar-nav {
+  background-color: #ceb195 !important;
+  font-weight: bold;
+}
+
+.m-auto a {
+  color: black !important;
+  margin: 0 24px;
+}
+
+a {
+  color: black;
+}
+
+.navbar {
+  top: 0;
+  transition: all 0.3 ease-in-out;
+}
+
+.active {
+  border-bottom: 1px solid black;
+}/*# sourceMappingURL=navbarMenu.css.map */

@@ -1,0 +1,17 @@
+.navbar {
+  background-color: #CEB195 !important;
+  color: black !important;
+  font-weight: bold;
+}
+
+.navbar i {
+  font-size: 24px;
+}
+
+.navbar .m-auto a {
+  margin: 0 24px;
+}
+
+.active {
+  border-bottom: 1px solid black;
+}

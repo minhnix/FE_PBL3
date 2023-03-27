@@ -1,0 +1,14 @@
+footer {
+  color: white;
+}
+footer ul li {
+  text-align: left;
+  margin: 12px;
+}
+footer ul li a {
+  color: white;
+  text-decoration: none;
+}
+footer ul li .bi {
+  margin-right: 24px;
+}/*# sourceMappingURL=homePage.css.map */
