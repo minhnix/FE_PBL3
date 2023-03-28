@@ -16,7 +16,6 @@ a {
   top: 0;
   transition: all 0.3 ease-in-out;
 }
-
-.active {
+.navbar .active {
   border-bottom: 1px solid black;
 }/*# sourceMappingURL=navbarMenu.css.map */

@@ -12,6 +12,6 @@
   margin: 0 24px;
 }
 
-.active {
+.navbar .active {
   border-bottom: 1px solid black;
 }

@@ -1,0 +1,19 @@
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  border-bottom: 1px solid black;
+  margin: 12px 0;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+ul li {
+  cursor: pointer;
+}
+
+.active {
+  font-weight: bold;
+}/*# sourceMappingURL=menu.css.map */

@@ -11,9 +11,11 @@ import {
 } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import HomePage from './components/HomePage';
+import HomePage from './routes/HomePage';
 import SignIn from './routes/SignIn';
-
+import SignUp from './routes/SignUp';
+import Menu from './routes/Menu';
+import EditProfileUser from './routes/EditProfileUser';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,24 @@ const router = createBrowserRouter([
     path: "/signin",
     element: (
       <SignIn></SignIn>
+    )
+  },
+  {
+    path: "/signup",
+    element: (
+      <SignUp></SignUp>
+    )
+  },
+  {
+    path: "/menu",
+    element: (
+      <Menu></Menu>
+    )
+  },
+  {
+    path: "/edit",
+    element: (
+      <EditProfileUser></EditProfileUser>
     )
   },
 

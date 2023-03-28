@@ -1,17 +1,17 @@
 import React from 'react'
-import ImageSlider from './ImageSlider';
-import NavbarMenu from './NavbarMenu';
+import ImageSlider from '../components/ImageSlider';
+import NavbarMenu from '../components/NavbarMenu';
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/esm/Image';
-import HomePageItems from './HomePageItems';
+import HomePageItems from '../components/HomePageItems';
 import "../styles/homePage.css"
 
 const HomePage = () => {
     return (
         <>
-            <NavbarMenu></NavbarMenu>
+            <NavbarMenu isHomePage={true}></NavbarMenu>
             <ImageSlider></ImageSlider>
             <Container >
                 <Row id="about" style={{ padding: "48px 0", borderBottom: "2px solid black" }}>
