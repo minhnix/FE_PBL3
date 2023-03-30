@@ -14,26 +14,29 @@ body {
 html,
 body {
   overflow-x: hidden;
+}
 
+.shadow-box {
+  box-shadow: 7px 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.faj-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #root {
   background-color: #d9d9d9;
 }
 
+Button:hover {
+  opacity: .8;
+}
+
 * {
   scroll-behavior: smooth;
 
-}
-
-.scrolled-down {
-  display: none !important;
-  transition: all 0.3s ease-in-out;
-}
-
-.scrolled-up {
-  display: block !important;
-  transition: all 0.3s ease-in-out;
 }
 
 code {

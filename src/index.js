@@ -15,7 +15,11 @@ import HomePage from './routes/HomePage';
 import SignIn from './routes/SignIn';
 import SignUp from './routes/SignUp';
 import Menu from './routes/Menu';
-import EditProfileUser from './routes/EditProfileUser';
+import EditProfileUser from './routes/ProfileUser';
+import OrderDetailItems from './components/OrderDetailItems';
+import OrderDetail from './routes/OrderDetail';
+import EditProfile from './routes/EditProfile';
+import CartPage from './routes/CartPage';
 
 const router = createBrowserRouter([
   {
@@ -43,11 +47,30 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: "/edit",
+    path: "/profile",
     element: (
       <EditProfileUser></EditProfileUser>
     )
   },
+  {
+    path: "/order-detail/:id",
+    element: (
+      <OrderDetail></OrderDetail>
+    )
+  },
+  {
+    path: "/edit-profile",
+    element: (
+      <EditProfile></EditProfile>
+    )
+  },
+  {
+    path: "/cart",
+    element: (
+      <CartPage />
+    )
+  },
+
 
 ]);
 

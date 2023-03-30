@@ -8,7 +8,6 @@ body .container1 {
   align-items: center;
 }
 body .container1 .form-box {
-  width: 50%;
   height: auto;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
@@ -66,4 +65,16 @@ body .container1 input:-webkit-autofill:focus {
 }
 body .container1 input[data-autocompleted] {
   background-color: transparent !important;
+}
+
+@media only screen and (max-width: 992px) {
+  .form-box {
+    width: 90% !important;
+  }
+  .imgDeco {
+    display: none;
+  }
+  .form-input-box {
+    width: 80%;
+  }
 }/*# sourceMappingURL=signIn.css.map */

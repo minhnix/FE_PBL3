@@ -12,6 +12,7 @@ import CardBox from '../components/CardBox';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import Footer from '../components/Footer';
 const Menu = () => {
     const [type, setType] = useState("All")
     console.log(type)
@@ -20,6 +21,23 @@ const Menu = () => {
         items.forEach(item => item.classList.contains(type) ? "" : item.classList.remove("active"))
         document.getElementById("meal " + type)?.parentElement.classList.add("active")
     }, [type])
+    const temp = [
+        {
+            id: 1,
+            name: "cc",
+            type: "Drinks"
+        },
+        {
+            id: 2,
+            name: "cc2",
+            type: "Foods"
+        },
+        {
+            id: 3,
+            name: "cc3",
+            type: "Drinks"
+        }
+    ]
     return (
         <>
             <NavbarMenu isHomePage={false}></NavbarMenu>
@@ -35,7 +53,6 @@ const Menu = () => {
                             <Form.Control className='shadow-none' style={{ outline: "none" }}
                                 aria-label="Example text with button addon"
                                 aria-describedby="basic-addon1"
-
                             />
                         </InputGroup>
                     </Col>
@@ -61,48 +78,22 @@ const Menu = () => {
                         </div>
 
                     </Col>
+
                     <Col xl={9} sm={12}>
                         <Row className='mt-4' style={{ rowGap: "48px" }}>
+                            {/* <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
-                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
-                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
+                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col> */}
+                            {temp.map(item => type === "All" ? item.name : item.type === type ? item.name : null)
+                            }
                         </Row>
                     </Col>
                 </Row>
                 <HomePageItems id={"contact"} title={"Contact Us"}></HomePageItems>
             </Container>
-            <footer style={{ backgroundColor: "#B0906F" }}>
-                <Row style={{ textAlign: "center" }}>
-                    <Col lg={4} sm={12} className="p-5">
-
-                        <Image src="FooterIcon.png"></Image>
-                        <h1>MILK TEA POINT</h1>
-                        <p>Our Business Is Always The Way You Like. We Don't Make Your Milk Tea. We Make Your Day. We’re Not Just A Business. We’re A Lifestyle.</p>
-                    </Col>
-                    <Col lg={4} sm={12} className="p-5">
-                        <h1>Quick Links</h1>
-                        <ul style={{ listStyle: "none" }}>
-                            <li><a href='#home'>Home</a></li>
-                            <li><a href='#about'>About Us</a></li>
-                            <li><a href='#service'>Our Service</a></li>
-                            <li><a href='#team'>Our Team</a></li>
-                            <li><a href='#contact'>Contact Us</a></li>
-                        </ul>
-                    </Col>
-                    <Col lg={4} sm={12} className="p-5">
-                        <h1>Contact Info</h1>
-                        <ul style={{ listStyle: "none" }}>
-                            <li><i class="bi bi-telephone"></i>+999 999 999</li>
-                            <li><i class="bi bi-telephone"></i>+999 999 999</li>
-                            <li><i class="bi bi-map"></i>54 Nguyễn Lương Bằng, Liên Chiểu, Đà Nẵng</li>
-
-                        </ul>
-                    </Col>
-                </Row>
-
-            </footer>
+            <Footer isHomePage={false}></Footer>
         </>
     )
 }

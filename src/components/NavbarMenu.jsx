@@ -26,9 +26,18 @@ const NavbarMenu = (props) => {
                         <Nav.Link href="#contact">Contact</Nav.Link>
                     </Nav> : null}
                     <Nav >
-                        {user ? <Nav.Link href="#"><Link to="/edit" style={{ textDecoration: "none" }}><i className="bi bi-person"></i>Hi Userlame</Link></Nav.Link> : <Nav.Link href="#"><Link to="/signin" ><i className="bi bi-person"></i></Link></Nav.Link>}
+                        {user ? <>
+                            <Nav.Link href="#"><Link to="/profile" style={{ textDecoration: "none" }}><i className="bi bi-person"></i>Hi Userlame</Link></Nav.Link>
+                            <Nav.Link className='cart-box' data-value="10+"><Link to={`/cart`}><i className="bi bi-cart"></i></Link></Nav.Link>
+                            <Nav.Link><Link style={{ textDecoration: "none" }}><i class="bi bi-door-open"></i>Logout</Link></Nav.Link>
+                        </>
+                            :
+                            <>
+                                <Nav.Link href="#"><Link to="/signin" ><i className="bi bi-person"></i></Link></Nav.Link>
+                                <Nav.Link><Link to={`/signin`}><i className="bi bi-cart"></i></Link></Nav.Link>
+                            </>}
 
-                        <Nav.Link href="#features"><i className="bi bi-cart"></i></Nav.Link>
+
                     </Nav>
                 </Navbar.Collapse>
             </Container>

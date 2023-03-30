@@ -40,7 +40,7 @@ const SignIn = () => {
                                 </div>
                             </form>
                         </Col>
-                        <Col lg={5} sm={0}><Image src='img1.png' style={{ maxWidth: "100%", height: "100%" }}></Image>
+                        <Col lg={5} sm={0} className="imgDeco"><Image src='img1.png' style={{ maxWidth: "100%", height: "100%" }}></Image>
                         </Col>
                     </Row>
                 </div>

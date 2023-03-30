@@ -18,4 +18,22 @@ a {
 }
 .navbar .active {
   border-bottom: 1px solid black;
+}
+
+.cart-box {
+  position: relative;
+}
+.cart-box::before {
+  content: attr(data-value);
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: red;
+  right: -20%;
+  top: 0;
+  color: white;
 }/*# sourceMappingURL=navbarMenu.css.map */
