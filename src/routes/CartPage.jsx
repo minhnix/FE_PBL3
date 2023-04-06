@@ -66,7 +66,8 @@ const CartPage = () => {
                                         alignItems: "center",
                                         backgroundColor: "#CEB195",
                                         color: "white",
-                                        textAlign: "center"
+                                        textAlign: "center",
+                                        fontWeight: "600",
                                     }}
                                 >
                                     <li style={{ width: "50px" }}>
@@ -87,7 +88,7 @@ const CartPage = () => {
                                         backgroundColor: "#CEB195",
                                         color: "white",
                                         width: "425px",
-
+                                        fontWeight: "600",
                                     }}
                                 >
                                     <li style={{ width: "80px" }}>Size</li>
@@ -125,6 +126,7 @@ const CartPage = () => {
                                 display: "flex",
                                 flexDirection: "column",
                                 rowGap: "12px",
+                                fontWeight: "600",
                             }}
                         >
                             <ul

@@ -49,7 +49,7 @@ const ProfileUser = () => {
             <PagePresent title={"Profile"}></PagePresent>
             <Container className='mt-4 mb-4'>
                 <Row>
-                    <Col lg={4} sm={12} className="shadow-box faj-center p-4 mb-4" style={{ flexDirection: "column", backgroundColor: "white", borderRadius: "15px" }}>
+                    <Col lg={4} sm={12} className="shadow-box faj-center p-4 " style={{ flexDirection: "column", backgroundColor: "white", borderRadius: "15px" }}>
                         <div className='faj-center mb-4' style={{ width: "250px", height: "250px", backgroundColor: "#1f1f1f", borderRadius: "50%" }}>
                             <i class="bi bi-person" style={{ color: "white", fontSize: "200px", marginBottom: "80px" }}></i>
                         </div>

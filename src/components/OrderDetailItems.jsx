@@ -32,7 +32,8 @@ const OrderDetailItems = (props) => {
                                         backgroundColor: "#C8B6A2",
                                         padding: "16px 0",
                                         textAlign: "center",
-                                        height: "100px"
+                                        height: "100px",
+                                        fontWeight: "600",
                                     }}
                                 >
                                     {props.canEdit ? (

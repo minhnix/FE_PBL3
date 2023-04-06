@@ -62,7 +62,7 @@ const OrderDetail = () => {
                 <NavbarMenu></NavbarMenu>
                 <Container className='mt-4' style={{ height: "auto", display: "flex", justifyContent: "center", flexDirection: "column", paddingTop: "70px" }}>
                     <Row>
-                        <Col lg={6} sm={12} className="faj-center mb-4" >
+                        <Col lg={6} sm={12} className="faj-center" >
                             <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%", height: "100%", justifyContent: "normal" }}>
                                 <h3 style={{ justifyContent: "self-start" }}>Order Summary</h3>
                                 <div style={{ alignSelf: "self-start" }}>

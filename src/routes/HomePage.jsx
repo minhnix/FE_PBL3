@@ -27,7 +27,7 @@ const HomePage = () => {
                     <Col lg={6} sm={12} style={{ display: "flex", justifyContent: "center", flexDirection: "column", padding: "24px 0" }}>
                         <h1>Our Drinks Are All About Authenticity And Quality.</h1>
                         <h3>It Has Always Been And It Always Will Be.</h3>
-                        <p>
+                        <p style={{ fontWeight: "500", }}>
                             We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile,
                             We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile.
                             We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile.
