@@ -57,11 +57,11 @@ const Menu = () => {
                         </InputGroup>
                     </Col>
                 </Row>
-                <Row>
+                <Row style={{ borderBottom: "2px solid #A4907C", paddingBottom: "48px" }}>
                     <h1 style={{ textAlign: "center", margin: "48px 0" }} >Our Products</h1>
                     <h3 style={{ textAlign: "center", marginBottom: "24px" }}>{type}</h3>
-                    <Col lg={3} sm={12}>
-                        <h2>Category</h2>
+                    <Col lg={3} sm={12} className='mt-4 p-3 shadow-box' style={{ backgroundColor: "white", maxHeight: "300px", borderRadius: "15px" }}>
+                        <h2 style={{ textAlign: "center" }}>Category</h2>
                         <div>
                             <div onClick={() => setType("All")} className='category-item active'>
                                 <div id="meal All" >All</div>
@@ -69,11 +69,11 @@ const Menu = () => {
                             </div>
                             <div onClick={() => setType("Drinks")} className='category-item'>
                                 <div id="meal Drinks">Drinks</div>
-                                <div>16</div>
+                                <div>10</div>
                             </div>
                             <div onClick={() => setType("Foods")} className='category-item'>
                                 <div id="meal Foods">Foods</div>
-                                <div>16</div>
+                                <div>6</div>
                             </div>
                         </div>
 
@@ -81,13 +81,12 @@ const Menu = () => {
 
                     <Col xl={9} sm={12}>
                         <Row className='mt-4' style={{ rowGap: "48px" }}>
-                            {/* <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
                             <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
-                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col> */}
-                            {temp.map(item => type === "All" ? item.name : item.type === type ? item.name : null)
-                            }
+                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
+                            <Col lg={4} sm={6} style={{ display: "flex", justifyContent: "center" }}><CardBox /></Col>
+
                         </Row>
                     </Col>
                 </Row>

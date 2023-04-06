@@ -27,7 +27,7 @@ body {
 }
 
 #root {
-  background-color: #d9d9d9;
+  background-color: #FFE7C8;
 }
 
 Button:hover {
@@ -39,7 +39,29 @@ Button:hover {
 
 }
 
+.pagination {
+  margin-bottom: 0;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.screen-blur {
+  filter: blur(10px);
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(to bottom, #007383, #7303ab);
+  border-radius: 100rem;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #18191a;
+  border-radius: 100rem;
 }

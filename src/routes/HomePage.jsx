@@ -18,21 +18,20 @@ const HomePage = () => {
             <NavbarMenu isHomePage={true}></NavbarMenu>
             <ImageSlider></ImageSlider>
             <Container >
-                <Row id="about" style={{ padding: "48px 0", borderBottom: "2px solid black" }}>
+                <Row id="about" style={{ padding: "48px 0", borderBottom: "2px solid #A4907C" }}>
                     <h1 style={{ alignSelf: "center", textAlign: "center" }}>About Us</h1>
                     <Col lg={6} sm={12} style={{ display: "flex", justifyContent: "center" }}>
                         <Image src="/img.png" width={"460px"} height="400px">
                         </Image>
                     </Col>
                     <Col lg={6} sm={12} style={{ display: "flex", justifyContent: "center", flexDirection: "column", padding: "24px 0" }}>
-                        <h1>Milk tea The Way It Was Meant To Be.</h1>
-                        <h3>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</h3>
+                        <h1>Our Drinks Are All About Authenticity And Quality.</h1>
+                        <h3>It Has Always Been And It Always Will Be.</h3>
                         <p>
-                            Lorem Ipsum has been the industry's
-                            standard dummy text ever since the 1500s,Lorem Ipsum has been the industry's
-                            standard dummy text ever since the 1500s,Lorem Ipsum has been the industry's
-                            standard dummy text ever since the 1500s,Lorem Ipsum has been the industry's
-                            standard dummy text ever since the 1500s,
+                            We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile,
+                            We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile.
+                            We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile.
+                            We are passionate about sourcing the finest ingredients, blending them perfectly and soaking them carefully before brewing and serving them with a smile.
                         </p>
                     </Col>
                 </Row>

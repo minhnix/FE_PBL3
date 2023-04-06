@@ -16,7 +16,7 @@
   border-bottom-right-radius: 15px;
 }
 .items:hover::before {
-  content: "🚋";
+  content: "🛒";
   display: block;
   width: 100px;
   cursor: pointer;

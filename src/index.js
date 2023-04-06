@@ -5,9 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
-  Route,
-  Link,
 } from "react-router-dom";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,17 +15,29 @@ import SignIn from './routes/SignIn';
 import SignUp from './routes/SignUp';
 import Menu from './routes/Menu';
 import EditProfileUser from './routes/ProfileUser';
-import OrderDetailItems from './components/OrderDetailItems';
 import OrderDetail from './routes/OrderDetail';
 import EditProfile from './routes/EditProfile';
 import CartPage from './routes/CartPage';
+import AdminPage from './routes/AdminPage';
+import NotFound from './routes/NotFound';
+import MenuManagePage from './routes/MenuManagePage';
+import StaffManagePage from './routes/StaffManagePage';
+import BillManagePage from './routes/BillManagePage';
+import ImportManagePage from './routes/ImportManagePage';
+import IngredientManagePage from './routes/IngredientManagePage';
+import ImportAddManagePage from './routes/ImportAddManagePage';
+import StaffPage from './routes/StaffPage';
+import StaffOrderDetail from './routes/StaffOrderDetail';
+
+
+
+const role = 'user';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <HomePage></HomePage>
-    ),
+    element:
+      role === 'admin' ? <AdminPage></AdminPage> : role === "staff" ? <StaffPage /> : <HomePage></HomePage>
   },
   {
     path: "/signin",
@@ -59,6 +70,12 @@ const router = createBrowserRouter([
     )
   },
   {
+    path: "/orders/:id",
+    element: (
+      <StaffOrderDetail></StaffOrderDetail>
+    )
+  },
+  {
     path: "/edit-profile",
     element: (
       <EditProfile></EditProfile>
@@ -70,7 +87,42 @@ const router = createBrowserRouter([
       <CartPage />
     )
   },
-
+  {
+    path: "menu-management",
+    element:
+      role === 'admin' ? <MenuManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "staff-management",
+    element:
+      role === 'admin' ? <StaffManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "bill-management",
+    element:
+      role === 'admin' ? <BillManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "ingredient-management",
+    element:
+      role === 'admin' ? <IngredientManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "import-management",
+    element:
+      role === 'admin' ? <ImportManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "import-management/add",
+    element:
+      role === 'admin' ? <ImportAddManagePage /> : <Navigate to="/404" />
+  },
+  {
+    path: "*",
+    element: (
+      <NotFound></NotFound>
+    )
+  }
 
 ]);
 

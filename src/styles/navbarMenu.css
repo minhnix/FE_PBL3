@@ -1,6 +1,8 @@
+@charset "UTF-8";
 .navbar-nav {
   background-color: #ceb195 !important;
   font-weight: bold;
+  transition: opacity 1s ease-in-out;
 }
 
 .m-auto a {
@@ -14,7 +16,6 @@ a {
 
 .navbar {
   top: 0;
-  transition: all 0.3 ease-in-out;
 }
 .navbar .active {
   border-bottom: 1px solid black;
@@ -29,11 +30,99 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background-color: red;
   right: -20%;
-  top: 0;
+  top: -10px;
   color: white;
+  font-size: 13px;
+}
+
+.user-box {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 250px;
+  min-height: 130px;
+  border-radius: 15px;
+  background-color: #ceb195;
+  border: 2px solid #ffe7c8;
+  right: 15.5%;
+  top: 64px;
+  color: white;
+  font-size: 13px;
+  z-index: 9999;
+}
+.user-box::before {
+  content: "▲";
+  display: block;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: -15px;
+  right: 9%;
+}
+
+.show-nav {
+  animation: visible 0.5s forwards;
+}
+
+.hide-userForm {
+  display: none !important;
+}
+
+.show-userForm {
+  display: block;
+}
+
+.user-box li:hover {
+  opacity: 0.6;
+}
+
+.hide-nav {
+  animation: re-visible 0.5s forwards;
+}
+.hide-nav .user-box {
+  animation: form-visible 0.5s forwards;
+}
+
+@keyframes visible {
+  from {
+    top: -10%;
+  }
+  to {
+    top: 0%;
+  }
+}
+@keyframes form-visible {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes re-visible {
+  from {
+    top: 0%;
+  }
+  to {
+    top: -10%;
+  }
+}
+.v-nav-item {
+  margin-left: 12px;
+  transition: all 0.1s ease-in-out;
+  display: flex;
+}
+.v-nav-item i {
+  width: 40px;
+}
+.v-nav-item:hover {
+  border-radius: 25px;
+  background-color: #3c3c3c;
 }/*# sourceMappingURL=navbarMenu.css.map */

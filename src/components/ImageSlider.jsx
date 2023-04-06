@@ -14,7 +14,7 @@ const ImageSlider = () => {
     };
     return (
         <>
-            <div id="home"></div>
+            <div id="home" style={{ paddingTop: "62px" }}></div>
             {/* <Carousel controls={false} fade={true}>
                 <Carousel.Item interval={2000}>
                     <img

@@ -6,9 +6,7 @@ import Footer from '../components/Footer'
 import Container from 'react-bootstrap/esm/Container'
 import Row from 'react-bootstrap/esm/Row'
 import Col from 'react-bootstrap/esm/Col'
-import OrderItems from '../components/OrderItems'
 import OrderDetailItems from '../components/OrderDetailItems'
-import PaginationComponent from '../components/PaginationComponent'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 const OrderDetail = () => {
     const { id } = useParams()
@@ -62,11 +60,11 @@ const OrderDetail = () => {
         return (
             <>
                 <NavbarMenu></NavbarMenu>
-                <Container className='mt-4' style={{ height: "auto", display: "flex", justifyContent: "center", flexDirection: "column" }}>
+                <Container className='mt-4' style={{ height: "auto", display: "flex", justifyContent: "center", flexDirection: "column", paddingTop: "70px" }}>
                     <Row>
-                        <Col lg={6} sm={12} className="faj-center mb-4">
-                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%" }}>
-                                <h3>Order Summary</h3>
+                        <Col lg={6} sm={12} className="faj-center mb-4" >
+                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%", height: "100%", justifyContent: "normal" }}>
+                                <h3 style={{ justifyContent: "self-start" }}>Order Summary</h3>
                                 <div style={{ alignSelf: "self-start" }}>
                                     <ul style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}>
                                         <li>Date :</li>
@@ -77,13 +75,14 @@ const OrderDetail = () => {
                                     </ul>
                                 </div>
                             </div></Col>
-                        <Col lg={6} sm={12} className="faj-center">
-                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%" }}>
-                                <h3>Shipping Infomation</h3>
-                                <div style={{ alignSelf: "self-start" }}>
-                                    <ul style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}>
+                        <Col lg={6} sm={12} className="faj-center" >
+                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%", height: "100%", justifyContent: "normal" }}>
+                                <h3 style={{ justifySelf: "self-start" }}>Shipping Infomation</h3>
+                                <div style={{ alignSelf: "self-start", display: "flex", justifyContent: "space-between", height: "100%" }}>
+                                    <ul style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", rowGap: "16px" }}>
                                         <li>Fullname :</li>
                                         <li>Email :</li>
+                                        <li>Phone Lumber :</li>
                                         <li>Address :</li>
                                     </ul>
                                 </div>
@@ -91,24 +90,25 @@ const OrderDetail = () => {
                     </Row>
                     <Row className="mt-4 mb-4">
                         <Col lg={12} className="faj-center">
-                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "white", borderRadius: "15px", flexDirection: "column", width: "100%" }}>
+                            <div className='shadow-box faj-center p-4' style={{ backgroundColor: "#f5f5f5", borderRadius: "15px", flexDirection: "column", width: "100%" }}>
                                 <h3>Order Items</h3>
-                                <div style={{ width: "100%" }}>
+                                <div className='order-detail-box' style={{ width: "100%" }} >
                                     <OrderDetailItems canEdit={false} type={"order-detail"} items={currentPosts}></OrderDetailItems>
                                     {/* <PaginationComponent postsPerPage={postsPerPage} totalPosts={temp.length} paginate={paginate}></PaginationComponent> */}
-                                    <div className='faj-center'>
-                                        <PaginationControl
-                                            page={currentPage}
-                                            between={4}
-                                            total={temp.length}
-                                            limit={2}
-                                            changePage={(currentPage) => {
-                                                setCurrentPage(currentPage);
-                                                localStorage.setItem('currentOrderPage', currentPage);
-                                            }}
-                                            ellipsis={4}
-                                        />
-                                    </div>
+
+                                </div>
+                                <div className='faj-center'>
+                                    <PaginationControl
+                                        page={currentPage}
+                                        between={4}
+                                        total={temp.length}
+                                        limit={2}
+                                        changePage={(currentPage) => {
+                                            setCurrentPage(currentPage);
+                                            localStorage.setItem('currentOrderPage', currentPage);
+                                        }}
+                                        ellipsis={4}
+                                    />
                                 </div>
                             </div></Col>
                     </Row>
