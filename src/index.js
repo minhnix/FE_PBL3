@@ -31,11 +31,12 @@ import StaffOrderDetail from "./routes/StaffOrderDetail";
 import jwtDecode from "jwt-decode";
 
 const token = localStorage.getItem("token");
-const { user } = jwtDecode(token);
-const role = user.role[0].name;
-
-console.log("user :>> ", user);
-
+let role = "";
+if (token) {
+  const { user } = jwtDecode(token);
+  role = user.role[0].name;
+  console.log(user);
+}
 const router = createBrowserRouter([
   {
     path: "/",

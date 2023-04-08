@@ -107,15 +107,12 @@ const Menu = () => {
                 className="category-item active"
               >
                 <div id="meal All">All</div>
-                <div>16</div>
               </div>
               <div onClick={() => setType("Drink")} className="category-item">
                 <div id="meal Drink">Drink</div>
-                <div>10</div>
               </div>
               <div onClick={() => setType("Food")} className="category-item">
                 <div id="meal Food">Food</div>
-                <div>6</div>
               </div>
             </div>
           </Col>

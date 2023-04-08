@@ -28,10 +28,10 @@ const SignIn = () => {
       .post("/auth/login", body)
       .then((response) => response)
       .catch((error) => error.response);
-    console.log(res);
     if (res.status === 200) {
       localStorage.setItem("token", res.data.accessToken);
       navigate("/");
+      window.location.reload();
     } else if (res.status === 401) {
       setError(res.data);
     } else if (res.status === 400) {
@@ -89,7 +89,7 @@ const SignIn = () => {
                     </label>
                     <input
                       onChange={(e) => setPassword(e.target.value)}
-                      type="text"
+                      type="password"
                       name=""
                       style={{
                         width: "100%",
