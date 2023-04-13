@@ -26,6 +26,7 @@ export function formatNumber(val) {
 }
 
 export function formatDate(date) {
+  if (date == null || date === undefined) return null;
   const time = date.substring(11, 16);
   const a = date.substring(0, 10);
   const result = time + " " + a.split("-").reverse().join("/");
