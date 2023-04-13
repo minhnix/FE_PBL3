@@ -7,10 +7,13 @@ import { BsEye, BsTrash } from "react-icons/bs";
 import Image from "react-bootstrap/esm/Image";
 import { MdSettings } from "react-icons/md";
 import { useCart } from "../Context/Cart.context";
+import { formatCostNumber, formatDate } from "../utils/helper";
 const OrderDetailItems = (props) => {
   const { items } = props;
   const { updateCart, deleteCart, setAmountCart, checkOne, unCheckOne } =
     useCart();
+
+  console.log(items);
 
   const navigate = useNavigate();
   if (props.type === "order-detail") {
@@ -64,7 +67,6 @@ const OrderDetailItems = (props) => {
                                 .forEach((checkbox) => {
                                   if (!checkbox.checked) allChecked = false;
                                 });
-                              console.log(allChecked);
                               props.checkboxAll.current.checked = allChecked;
                             }
                           }}
@@ -430,7 +432,7 @@ const OrderDetailItems = (props) => {
             color: "black",
             cursor: "pointer",
           }}
-          onClick={() => navigate(`/orders/${props.data.id}`)}
+          onClick={() => navigate(`/orders/${items?.id}`)}
         >
           <li
             style={{
@@ -439,7 +441,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.name}
+            {items?.customer.username}
           </li>
           <li
             style={{
@@ -448,7 +450,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.date}
+            {formatDate(items?.createdAt)}
           </li>
           <li
             style={{
@@ -457,7 +459,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.address}
+            {items?.address}
           </li>
           <li
             style={{
@@ -466,7 +468,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.phone}
+            {items?.customer.phoneNumber}
           </li>
         </ul>
       </>
@@ -487,7 +489,12 @@ const OrderDetailItems = (props) => {
           <li
             style={{ width: "80px", fontWeight: "bold", textAlign: "center" }}
           >
-            <Image rounded width={50} height={50} src={props.data.imgUrl} />
+            <Image
+              rounded
+              width={50}
+              height={50}
+              src={items?.imageUrl || "/Card1.png"}
+            />
           </li>
           <li
             style={{
@@ -496,7 +503,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.name}
+            {items?.menu}
           </li>
           <li
             style={{
@@ -505,7 +512,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.total}
+            {formatCostNumber(items?.totalCost)}
           </li>
           <li
             style={{
@@ -514,7 +521,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.size}
+            {items?.menuSize?.split("_")[1]}
           </li>
           <li
             style={{
@@ -523,7 +530,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {props.data.quantity}
+            {items?.quantity}
           </li>
         </ul>
       </>

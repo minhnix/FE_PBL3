@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavbarMenu from "../components/NavbarMenu";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -6,9 +6,12 @@ import OrderDetailItems from "../components/OrderDetailItems";
 import { useState } from "react";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { BsBell } from "react-icons/bs";
+import { axios } from "../api/config";
 const StaffPage = () => {
+  const token = localStorage.getItem("token");
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10);
+  const [orders, setOrders] = useState();
   const temp = [
     {
       id: 1,
@@ -35,6 +38,19 @@ const StaffPage = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = temp.slice(indexOfFirstPost, indexOfLastPost);
+
+  useEffect(() => {
+    axios
+      .get(`orders/pending?size=${postsPerPage}&page=${currentPage - 1}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setOrders(response.data);
+      });
+  }, [currentPage]);
+
   return (
     <div style={{ display: "flex" }}>
       <NavbarMenu
@@ -107,13 +123,13 @@ const StaffPage = () => {
               </li>
             </ul>
 
-            {currentPosts?.map((item) => (
-              <OrderDetailItems type={"order"} data={item}></OrderDetailItems>
+            {orders?.content?.map((item) => (
+              <OrderDetailItems type={"order"} items={item}></OrderDetailItems>
             ))}
             <PaginationControl
               page={currentPage}
               between={3}
-              total={temp.length}
+              total={orders?.totalElements}
               limit={postsPerPage}
               changePage={(currentPage) => {
                 setCurrentPage(currentPage);

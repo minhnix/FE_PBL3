@@ -11,7 +11,7 @@ import CardBox from "../components/CardBox";
 import { axios } from "../api/config";
 import { useCart } from "../Context/Cart.context";
 import { useNavigate } from "react-router-dom";
-import { formatNumber } from "../utils/helper";
+import { formatCostNumber } from "../utils/helper";
 import { extraDeliveryCost } from "../utils/constant";
 const CartPage = () => {
   const [menu, setMenu] = useState([]);
@@ -217,7 +217,7 @@ const CartPage = () => {
                 }}
               >
                 <li>{`Subtotal (${cartItems.length} items) : `}</li>
-                <li>{formatNumber(getSubTotal())} VNĐ</li>
+                <li>{formatCostNumber(getSubTotal())}</li>
               </ul>
               <ul
                 style={{
@@ -276,7 +276,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Shipping Fee : </li>
-                <li>{formatNumber(deliveryCost)} VNĐ</li>
+                <li>{formatCostNumber(deliveryCost)}</li>
               </ul>
               <ul
                 style={{
@@ -287,7 +287,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Discount : </li>
-                <li>{formatNumber(amountDiscount)} VNĐ</li>
+                <li>{formatCostNumber(amountDiscount)}</li>
               </ul>
               <ul
                 style={{
@@ -298,7 +298,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Total : </li>
-                <li>{formatNumber(getTotal())} VNĐ</li>
+                <li>{formatCostNumber(getTotal())}</li>
               </ul>
             </ul>
             <Button

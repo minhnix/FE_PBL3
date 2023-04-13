@@ -1,4 +1,5 @@
-export function formatNumber(val) {
+export function formatCostNumber(val) {
+  if (val === undefined || val === null) return null;
   // remove sign if negative
   var sign = 1;
   if (val < 0) {
@@ -22,7 +23,8 @@ export function formatNumber(val) {
   }
 
   // return result with - sign if negative
-  return sign < 0 ? "-" + num : num;
+  num = sign < 0 ? "-" + num : num;
+  return num + " VNĐ";
 }
 
 export function formatDate(date) {
