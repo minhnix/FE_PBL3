@@ -1,15 +1,17 @@
 import Card from "react-bootstrap/Card";
 import "../styles/cardBox.css";
 import { useState } from "react";
+import { useCart } from "../Context/Cart.context";
 function CardBox(props) {
   const extraPrice = {
-    S: 0,
-    M: 5000,
-    L: 8000,
-    XL: 15000,
+    SIZE_S: 0,
+    SIZE_M: 5000,
+    SIZE_L: 8000,
+    SIZE_XL: 15000,
   };
+  const { addCart } = useCart();
 
-  const [size, setSize] = useState("S");
+  const [size, setSize] = useState("SIZE_S");
 
   const getPrice = (originPrice, size) => {
     return originPrice + extraPrice[size];
@@ -33,16 +35,36 @@ function CardBox(props) {
         ) : (
           <Card.Text style={{ textAlign: "center" }}>
             <h3>{props.menu?.name}</h3>
-            <select name="" id="" onChange={(e) => setSize(e.target.value)}>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
+            <select
+              name=""
+              id=""
+              onChange={(e) => {
+                setSize(e.target.value);
+              }}
+            >
+              <option value="SIZE_S">S</option>
+              <option value="SIZE_M">M</option>
+              <option value="SIZE_L">L</option>
+              <option value="SIZE_XL">XL</option>
             </select>
             <h4>Prices: {getPrice(props.menu.cost, size)} VNĐ</h4>
           </Card.Text>
         )}
       </Card.Body>
+      {!props.type && (
+        <div
+          className="item-box-hover"
+          onClick={() =>
+            addCart({
+              menuId: props.menu.id,
+              quantity: 1,
+              size,
+            })
+          }
+        >
+          <div>🛒</div>
+        </div>
+      )}
     </Card>
   );
 }

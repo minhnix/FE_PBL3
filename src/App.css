@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #CEB195 !important;
+  background-color: #ceb195 !important;
   color: black !important;
   font-weight: bold;
 }
@@ -20,4 +20,8 @@
   .order-detail-box {
     margin-left: 250px;
   }
+}
+
+.text403:hover {
+  opacity: 0.6;
 }

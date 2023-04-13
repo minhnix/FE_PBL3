@@ -40,10 +40,8 @@ const Menu = () => {
       .get(`/menu/search?q=${debounce}&cid=${cid}`)
       .then((res) => {
         setMenu(res.data);
-        console.log(res);
       })
       .catch((err) => console.log(err));
-    console.log(search);
   }, [debounce, type]);
 
   return (

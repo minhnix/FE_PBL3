@@ -12,14 +12,21 @@ import {
   AiOutlineShoppingCart,
   AiOutlineUnorderedList,
 } from "react-icons/ai";
-import { BsBell, BsList, BsDoorOpen, BsEye } from "react-icons/bs";
+import { BsBell, BsList, BsDoorOpen, BsEye, BsCart } from "react-icons/bs";
+import { useCart } from "../Context/Cart.context";
+import jwtDecode from "jwt-decode";
 const NavbarMenu = (props) => {
+  const user = localStorage.getItem("token");
+  let username = "guest";
+  if (user !== null) username = jwtDecode(user).user.username;
   const navigate = useNavigate();
+  const { amountCart } = useCart();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [moreClick, setMoreClick] = useState(false);
   const [userClick, setUserClick] = useState(false);
-  const user = localStorage.getItem("token");
+  const [notiClick, setNotiClick] = useState(false);
+  const [formName, setFormName] = useState("");
   const handleMoreClick = () => {
     document.querySelector(".more-btn").classList.toggle("active");
     setMoreClick(!moreClick);
@@ -173,7 +180,7 @@ const NavbarMenu = (props) => {
                   marginBottom: "16px",
                   textDecoration: "none",
                 }}
-                to="/bill-management"
+                to="/"
               >
                 <AiOutlineCreditCard
                   style={{ marginRight: "20px", fontSize: "26px" }}
@@ -234,7 +241,7 @@ const NavbarMenu = (props) => {
         expand="lg"
         style={{ color: "black!important" }}
       >
-        <Container>
+        <Container style={{ position: "relative" }}>
           <Link to="/" style={{ textDecoration: "none" }}>
             <Image
               src="/Logo.png"
@@ -257,7 +264,7 @@ const NavbarMenu = (props) => {
                 <Nav.Link href="">
                   <Link
                     to="/menu"
-                    style={{ textDecoration: "none", marginLeft: "0" }}
+                    style={{ textDecoration: "none", margin: "0" }}
                   >
                     Menu
                   </Link>
@@ -281,12 +288,16 @@ const NavbarMenu = (props) => {
                       marginRight: "12px",
                     }}
                   >
-                    <Nav.Link className="cart-box" data-value="9+">
+                    <Nav.Link className="cart-box" data-value="3">
                       <Link
-                        to={`/cart`}
                         style={{ fontSize: "24px", lineHeight: "20px" }}
+                        onClick={() => {
+                          setFormName("noti");
+                          setNotiClick(!notiClick);
+                          setUserClick(false);
+                        }}
                       >
-                        <i className="bi bi-cart"></i>
+                        <BsBell></BsBell>
                       </Link>
                     </Nav.Link>
                   </span>
@@ -301,12 +312,12 @@ const NavbarMenu = (props) => {
                       marginRight: "12px",
                     }}
                   >
-                    <Nav.Link className="cart-box" data-value="3">
+                    <Nav.Link className="cart-box" data-value={amountCart}>
                       <Link
                         to={`/cart`}
                         style={{ fontSize: "24px", lineHeight: "20px" }}
                       >
-                        <BsBell></BsBell>
+                        <BsCart></BsCart>
                       </Link>
                     </Nav.Link>
                   </span>
@@ -322,7 +333,11 @@ const NavbarMenu = (props) => {
                   >
                     <Nav.Link
                       style={{ fontSize: "24px", lineHeight: "20px" }}
-                      onClick={() => setUserClick(!userClick)}
+                      onClick={() => {
+                        setFormName("user");
+                        setUserClick(!userClick);
+                        setNotiClick(false);
+                      }}
                     >
                       <AiOutlineUser></AiOutlineUser>
                     </Nav.Link>
@@ -370,95 +385,137 @@ const NavbarMenu = (props) => {
               )}
             </Nav>
           </Navbar.Collapse>
-        </Container>
-        <div
-          className={`user-box ${
-            userClick ? "show-userForm" : "hide-userForm"
-          }`}
-        >
-          <ul
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-              height: "130px",
-              paddingLeft: "12px",
-              marginBottom: "0",
-            }}
+          <div
+            className={`user-box ${
+              userClick && formName === "user"
+                ? "show-userForm"
+                : "hide-userForm"
+            }`}
           >
-            <Link
-              to={"/profile"}
+            <ul
               style={{
-                fontSize: "24px",
-                lineHeight: "20px",
-                textDecoration: "none",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+                height: "150px",
+                paddingLeft: "0px",
+                marginBottom: "0",
               }}
             >
-              <li
+              <h5
+                className="mt-2"
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  textAlign: "center",
+                  color: "black",
+                  userSelect: "none",
                 }}
               >
-                <span
+                Hi {username}
+              </h5>
+              <Link
+                to={"/profile"}
+                style={{
+                  fontSize: "20px",
+                  lineHeight: "20px",
+                  textDecoration: "none",
+                  paddingLeft: "20px",
+                }}
+              >
+                <li
                   style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#FFE7C8",
-                    width: "50px",
-                    height: "50px",
-                    display: "grid",
-                    placeItems: "center",
-                    marginRight: "12px",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  <BsEye></BsEye>
-                </span>
-                <span style={{ fontWeight: "700", fontSize: "16px" }}>
-                  View Profile
-                </span>
-              </li>
-            </Link>
+                  <span
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#FFE7C8",
+                      width: "30px",
+                      height: "30px",
+                      display: "grid",
+                      placeItems: "center",
+                      marginRight: "12px",
+                    }}
+                  >
+                    <BsEye></BsEye>
+                  </span>
+                  <span style={{ fontWeight: "700", fontSize: "16px" }}>
+                    View Profile
+                  </span>
+                </li>
+              </Link>
 
-            <Link
-              onClick={() => {
-                localStorage.removeItem("token");
-                window.location.reload();
-              }}
-              to={`/`}
-              style={{
-                fontSize: "24px",
-                lineHeight: "20px",
-                textDecoration: "none",
-              }}
-            >
-              <li
+              <Link
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/");
+                  window.location.reload();
+                }}
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
+                  fontSize: "20px",
+                  lineHeight: "20px",
+                  textDecoration: "none",
                 }}
               >
-                <span
+                <li
                   style={{
-                    borderRadius: "50%",
-                    backgroundColor: "#FFE7C8",
-                    width: "50px",
-                    height: "50px",
-                    display: "grid",
-                    placeItems: "center",
-                    marginRight: "12px",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingLeft: "20px",
                   }}
                 >
-                  <BsDoorOpen></BsDoorOpen>
-                </span>
-                <span style={{ fontWeight: "700", fontSize: "16px" }}>
-                  Logout
+                  <span
+                    style={{
+                      borderRadius: "50%",
+                      backgroundColor: "#FFE7C8",
+                      width: "30px",
+                      height: "30px",
+                      display: "grid",
+                      placeItems: "center",
+                      marginRight: "12px",
+                    }}
+                  >
+                    <BsDoorOpen></BsDoorOpen>
+                  </span>
+                  <span style={{ fontWeight: "700", fontSize: "16px" }}>
+                    Logout
+                  </span>
+                </li>
+              </Link>
+            </ul>
+          </div>
+          <div
+            className={`noti-box ${
+              notiClick && formName === "noti"
+                ? "show-userForm"
+                : "hide-userForm"
+            }`}
+          >
+            <ul
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "150px",
+                padding: "12px",
+                marginBottom: "0",
+              }}
+            >
+              <li className="mt-3">
+                <span className="mt-2" style={{ color: "black" }}>
+                  Đơn hàng #1 đã bị hủy
                 </span>
               </li>
-            </Link>
-          </ul>
-        </div>
+              <li className="mt-3">
+                <span className="mt-2" style={{ color: "black" }}>
+                  Đơn hàng #0 đã được xác nhận
+                </span>
+              </li>
+            </ul>
+          </div>
+        </Container>
       </Navbar>
     </>
   );

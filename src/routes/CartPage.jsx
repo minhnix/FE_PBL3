@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
@@ -9,53 +9,96 @@ import PagePresent from "../components/PagePresent";
 import Button from "react-bootstrap/esm/Button";
 import CardBox from "../components/CardBox";
 import { axios } from "../api/config";
+import { useCart } from "../Context/Cart.context";
+import { useNavigate } from "react-router-dom";
+import { formatNumber } from "../utils/helper";
+import { extraDeliveryCost } from "../utils/constant";
 const CartPage = () => {
   const [menu, setMenu] = useState([]);
-  const temp = [
-    {
-      id: 1,
-      name: "Cafe",
-      quantity: 1,
-      imgUrl: "/Card1.png",
-    },
-    {
-      id: 2,
-      name: "Cafe 1",
-      quantity: 2,
-      imgUrl: "/Card1.png",
-    },
-    {
-      id: 3,
-      name: "Cafe 2",
-      quantity: 3,
-      imgUrl: "/Card1.png",
-    },
-    {
-      id: 4,
-      name: "Cafe 3",
-      quantity: 2,
-      imgUrl: "/Card1.png",
-    },
-    {
-      id: 5,
-      name: "Cafe 4",
-      quantity: 2,
-      imgUrl: "/Card1.png",
-    },
-    {
-      id: 6,
-      name: "Cafe 6",
-      quantity: 2,
-      imgUrl: "/Card1.png",
-    },
-  ];
+  const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [districtsCode, setDistrictsCode] = useState("490");
+  const [wardsCode, setWardsCode] = useState("20194");
+  const { cartItems, unCheckAll, checkAll, deleteCart, setAmountCart } =
+    useCart();
+
+  const checkboxAll = useRef();
+
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios
+      .get("https://provinces.open-api.vn/api/p/48?depth=2")
+      .then((response) => {
+        setDistricts(response.data.districts);
+      });
+
+    axios
+      .get(`https://provinces.open-api.vn/api/d/${districtsCode}?depth=2`)
+      .then((response) => {
+        setWards(response.data.wards);
+      });
+  }, [districtsCode]);
+
+  const getSubTotal = () => {
+    return cartItems.reduce(
+      (total, item) => (item.selected ? total + item.totalCost : total),
+      0
+    );
+  };
+
+  const getDiscount = () => {
+    if (cartItems.length >= 5) {
+      return 5000;
+    }
+    return 2000;
+  };
+
+  const getShippingFee = () => {
+    return Number(
+      extraDeliveryCost[districtsCode][0].hasOwnProperty(wardsCode)
+        ? extraDeliveryCost[districtsCode][0][wardsCode]
+        : extraDeliveryCost[districtsCode][0][
+            Object.keys(extraDeliveryCost[districtsCode][0])[0]
+          ]
+    );
+  };
+
+  const deliveryCost = getShippingFee();
+  const amountDiscount = getDiscount();
+  const getTotal = () => {
+    return getSubTotal() + deliveryCost - amountDiscount;
+  };
+
+  const handleSubmitOrder = async () => {
+    const orderDetails = cartItems.filter((item) => item.selected);
+    if (orderDetails.length <= 0) return;
+    const reqBody = {
+      orderDetails,
+      address: "test",
+      deliveryCost,
+      amountDiscount,
+    };
+    const res = await axios.post("orders", reqBody, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    orderDetails.forEach((item) => deleteCart(item.id));
+    checkboxAll.current.checked = false;
+    setAmountCart(cartItems.length - orderDetails.length);
+    navigate("/order-detail/" + res.data.id);
+  };
 
   useEffect(() => {
+    if (localStorage.getItem("token") === null) {
+      navigate("/signin");
+    }
     axios
       .get(`/menu`)
       .then((res) => {
         setMenu(res.data.content);
-        console.log(res);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -86,7 +129,29 @@ const CartPage = () => {
                   }}
                 >
                   <li style={{ width: "50px" }}>
-                    <input type="checkbox" name="" id="" />
+                    <input
+                      ref={checkboxAll}
+                      type="checkbox"
+                      name=""
+                      id="cart-checkbox-all"
+                      onClick={(e) => {
+                        if (e.target.checked) {
+                          document
+                            .querySelectorAll(`input[name="cartCheckbox"]`)
+                            .forEach((checkbox) => {
+                              checkbox.checked = true;
+                            });
+                          checkAll();
+                        } else {
+                          document
+                            .querySelectorAll(`input[name="cartCheckbox"]`)
+                            .forEach((checkbox) => {
+                              checkbox.checked = false;
+                            });
+                          unCheckAll();
+                        }
+                      }}
+                    />
                   </li>
                   <li style={{ width: "80px" }}>Product</li>
                   <li style={{ width: "80px" }}>Name</li>
@@ -117,7 +182,8 @@ const CartPage = () => {
               canEdit={true}
               type={"order-detail"}
               venue={"cart"}
-              items={temp}
+              items={cartItems}
+              checkboxAll={checkboxAll}
             ></OrderDetailItems>
           </Col>
           <Col
@@ -150,8 +216,8 @@ const CartPage = () => {
                   paddingLeft: 0,
                 }}
               >
-                <li>{`Subtotal ( 3 items) : `}</li>
-                <li>12</li>
+                <li>{`Subtotal (${cartItems.length} items) : `}</li>
+                <li>{formatNumber(getSubTotal())} VNĐ</li>
               </ul>
               <ul
                 style={{
@@ -162,7 +228,44 @@ const CartPage = () => {
                 }}
               >
                 <li>Address : </li>
-                <li>Trung Quoc</li>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <select
+                    onChange={(e) => {
+                      let index = e.target.selectedIndex;
+                      console.log(e.target[index].text);
+                      setDistrictsCode(e.target.value);
+                    }}
+                    name=""
+                    id=""
+                  >
+                    {districts?.map((item) => (
+                      <option value={item.code}>{item.name}</option>
+                    ))}
+                  </select>
+                  <select
+                    onChange={(e) => {
+                      let index = e.target.selectedIndex;
+                      console.log(e.target[index].text);
+                      setWardsCode(e.target.value);
+                    }}
+                    name=""
+                    id=""
+                  >
+                    {wards?.map((item) => (
+                      <option value={item.code}>{item.name}</option>
+                    ))}
+                  </select>
+                  <input
+                    style={{
+                      outline: "none",
+                      border: "none",
+                      borderBottom: "1px solid gray",
+                    }}
+                    type="text"
+                    name=""
+                    id=""
+                  />
+                </div>
               </ul>
               <ul
                 style={{
@@ -173,7 +276,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Shipping Fee : </li>
-                <li>12</li>
+                <li>{formatNumber(deliveryCost)} VNĐ</li>
               </ul>
               <ul
                 style={{
@@ -184,7 +287,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Discount : </li>
-                <li>12</li>
+                <li>{formatNumber(amountDiscount)} VNĐ</li>
               </ul>
               <ul
                 style={{
@@ -195,7 +298,7 @@ const CartPage = () => {
                 }}
               >
                 <li>Total : </li>
-                <li>12</li>
+                <li>{formatNumber(getTotal())} VNĐ</li>
               </ul>
             </ul>
             <Button
@@ -204,6 +307,7 @@ const CartPage = () => {
                 outline: "none",
                 border: "0",
               }}
+              onClick={() => handleSubmitOrder()}
             >
               Confirm
             </Button>
@@ -229,5 +333,4 @@ const CartPage = () => {
     </>
   );
 };
-
 export default CartPage;

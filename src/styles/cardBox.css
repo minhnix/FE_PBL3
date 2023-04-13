@@ -1,23 +1,22 @@
-@charset "UTF-8";
 .items {
   position: relative;
 }
-.items::before {
-  content: "";
-  position: absolute;
-  width: 0px;
+.items:hover .item-box-hover {
+  width: 100px;
+  visibility: visible;
+}
+.items .item-box-hover {
+  width: 0;
   height: 40px;
   background-color: #f05d40;
+  position: absolute;
+  display: flex;
+  visibility: hidden;
+  justify-content: center;
+  align-items: center;
   top: 10%;
-  text-align: center;
-  line-height: 40px;
-  transition: width 0.2s ease-out;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
-}
-.items:hover::before {
-  content: "🛒";
-  display: block;
-  width: 100px;
+  transition: all 0.3s linear;
   cursor: pointer;
-}/*# sourceMappingURL=cardBox.css.map */
+} /*# sourceMappingURL=cardBox.css.map */

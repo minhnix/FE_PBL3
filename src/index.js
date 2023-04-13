@@ -29,6 +29,9 @@ import ImportAddManagePage from "./routes/ImportAddManagePage";
 import StaffPage from "./routes/StaffPage";
 import StaffOrderDetail from "./routes/StaffOrderDetail";
 import jwtDecode from "jwt-decode";
+import { CartProvider } from "./Context/Cart.context";
+import ForbidentPage from "./routes/ForbiddenPage";
+import ForbiddenPage from "./routes/ForbiddenPage";
 
 const token = localStorage.getItem("token");
 let role = "";
@@ -112,6 +115,10 @@ const router = createBrowserRouter([
       role === "ROLE_ADMIN" ? <ImportAddManagePage /> : <Navigate to="/404" />,
   },
   {
+    path: "403",
+    element: <ForbiddenPage />,
+  },
+  {
     path: "*",
     element: <NotFound></NotFound>,
   },
@@ -119,9 +126,11 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <RouterProvider router={router}>
-    <App />
-  </RouterProvider>
+  <CartProvider>
+    <RouterProvider router={router}>
+      <App />
+    </RouterProvider>
+  </CartProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
