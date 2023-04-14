@@ -13,8 +13,6 @@ const OrderDetailItems = (props) => {
   const { updateCart, deleteCart, setAmountCart, checkOne, unCheckOne } =
     useCart();
 
-  console.log(items);
-
   const navigate = useNavigate();
   if (props.type === "order-detail") {
     return (
