@@ -12,48 +12,70 @@ import {
   AiOutlineShoppingCart,
   AiOutlineUnorderedList,
 } from "react-icons/ai";
-import { BsBell, BsList, BsDoorOpen, BsEye, BsCart } from "react-icons/bs";
+import {
+  BsBell,
+  BsList,
+  BsDoorOpen,
+  BsEye,
+  BsCart,
+  BsCartCheck,
+  BsCartX,
+} from "react-icons/bs";
 import { useCart } from "../Context/Cart.context";
 import jwtDecode from "jwt-decode";
+import { useNotification } from "../Context/Notification.context";
+import moment from "moment/moment";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 const NavbarMenu = (props) => {
   const user = localStorage.getItem("token");
   let username = "guest";
-  if (user !== null) username = jwtDecode(user).user.username;
+  if (user) username = jwtDecode(user).user.username;
   const navigate = useNavigate();
   const { amountCart } = useCart();
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const {
+    numberOfUnreadNotification,
+    notifications,
+    getNotifications,
+    clearNotifications,
+    last,
+    fetchMoreNotification,
+  } = useNotification();
+
+  // const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [moreClick, setMoreClick] = useState(false);
   const [userClick, setUserClick] = useState(false);
   const [notiClick, setNotiClick] = useState(false);
   const [formName, setFormName] = useState("");
+
   const handleMoreClick = () => {
     document.querySelector(".more-btn").classList.toggle("active");
     setMoreClick(!moreClick);
   };
-  const handleScroll = () => {
-    const currentScrollPos = window.scrollY;
-    if (currentScrollPos > prevScrollPos) {
-      setVisible(false);
-    } else {
-      setVisible(true);
-    }
+  // const handleScroll = () => {
+  //   const currentScrollPos = window.scrollY;
+  //   if (currentScrollPos > prevScrollPos) {
+  //     setVisible(false);
+  //   } else {
+  //     setVisible(true);
+  //   }
 
-    setPrevScrollPos(currentScrollPos);
-  };
+  //   setPrevScrollPos(currentScrollPos);
+  // };
 
-  useEffect(() => {
-    document
-      .querySelectorAll(".v-nav-item")
-      .forEach((item) =>
-        item.innerHTML.includes(props.currentManagePage)
-          ? item.classList.add("active")
-          : item.classList.remove("active")
-      );
-    window.addEventListener("scroll", handleScroll);
+  // useEffect(() => {
+  //   document
+  //     .querySelectorAll(".v-nav-item")
+  //     .forEach((item) =>
+  //       item.innerHTML.includes(props.currentManagePage)
+  //         ? item.classList.add("active")
+  //         : item.classList.remove("active")
+  //     );
+  //   window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
-  });
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // });
   if (props.position === "vertical") {
     return (
       <>
@@ -236,7 +258,8 @@ const NavbarMenu = (props) => {
     <>
       <Navbar
         fixed="top"
-        className={`flex-column ${visible ? "show-nav" : "hide-nav"}`}
+        // className={`flex-column ${visible ? "show-nav" : "hide-nav"}`}
+        className={`flex-column show-nav`}
         collapseOnSelect
         expand="lg"
         style={{ color: "black!important" }}
@@ -288,13 +311,18 @@ const NavbarMenu = (props) => {
                       marginRight: "12px",
                     }}
                   >
-                    <Nav.Link className="cart-box" data-value="3">
+                    <Nav.Link
+                      className="cart-box"
+                      data-value={numberOfUnreadNotification}
+                    >
                       <Link
                         style={{ fontSize: "24px", lineHeight: "20px" }}
                         onClick={() => {
                           setFormName("noti");
                           setNotiClick(!notiClick);
                           setUserClick(false);
+                          clearNotifications();
+                          getNotifications(0, 10);
                         }}
                       >
                         <BsBell></BsBell>
@@ -488,32 +516,92 @@ const NavbarMenu = (props) => {
             </ul>
           </div>
           <div
+            id="scrollableDiv"
+            style={{
+              maxHeight: "500px",
+              height: "auto",
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "0",
+              padding: "0 8px",
+            }}
             className={`noti-box ${
               notiClick && formName === "noti"
                 ? "show-userForm"
                 : "hide-userForm"
             }`}
           >
-            <ul
+            {/* <ul
               style={{
                 display: "flex",
                 flexDirection: "column",
-                height: "150px",
-                padding: "12px",
+                height: "auto",
                 marginBottom: "0",
+                padding: "0 8px",
               }}
-            >
-              <li className="mt-3">
-                <span className="mt-2" style={{ color: "black" }}>
-                  Đơn hàng #1 đã bị hủy
-                </span>
-              </li>
-              <li className="mt-3">
-                <span className="mt-2" style={{ color: "black" }}>
-                  Đơn hàng #0 đã được xác nhận
-                </span>
-              </li>
-            </ul>
+              id="scrollableDiv"
+            > */}
+            {notifications && notifications.length > 0 && (
+              <InfiniteScroll
+                dataLength={notifications.length}
+                next={fetchMoreNotification}
+                hasMore={!last}
+                loader={<h5 style={{ textAlign: "center" }}>Loading...</h5>}
+                scrollableTarget="scrollableDiv"
+                endMessage={
+                  <h5 style={{ textAlign: "center" }}>Hết thông báo</h5>
+                }
+              >
+                {notifications.map((notification) => (
+                  <div
+                    className="px-2 py-1"
+                    style={{
+                      display: "flex",
+                      borderBottom: "1px solid gray",
+                    }}
+                    onClick={() => navigate(notification.slug)}
+                  >
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {notification.type !== "FAILED" ? (
+                        <BsCartCheck size={30} color="black" />
+                      ) : (
+                        <BsCartX size={30} color="black" />
+                      )}
+                    </div>
+                    <div
+                      style={{
+                        marginLeft: "12px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <span className="mt-2" style={{ color: "black" }}>
+                        {notification.message}
+                      </span>
+                      <span style={{ color: "#1f1f1f", fontSize: "12px" }}>
+                        {moment(notification.createdAt).fromNow()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </InfiniteScroll>
+            )}
+
+            {notifications && notifications.length <= 0 && (
+              <p
+                style={{
+                  textAlign: "center",
+                  color: "black",
+                  paddingTop: "30px",
+                  fontSize: "17px",
+                }}
+              >
+                Không có thông báo
+              </p>
+            )}
+            {/* </ul> */}
           </div>
         </Container>
       </Navbar>

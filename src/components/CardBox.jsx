@@ -2,6 +2,7 @@ import Card from "react-bootstrap/Card";
 import "../styles/cardBox.css";
 import { useState } from "react";
 import { useCart } from "../Context/Cart.context";
+import { useNavigate } from "react-router-dom";
 function CardBox(props) {
   const extraPrice = {
     SIZE_S: 0,
@@ -12,6 +13,7 @@ function CardBox(props) {
   const { addCart } = useCart();
 
   const [size, setSize] = useState("SIZE_S");
+  const navigate = useNavigate();
 
   const getPrice = (originPrice, size) => {
     return originPrice + extraPrice[size];
@@ -54,13 +56,16 @@ function CardBox(props) {
       {!props.type && (
         <div
           className="item-box-hover"
-          onClick={() =>
-            addCart({
+          onClick={() => {
+            const is = addCart({
               menuId: props.menu.id,
               quantity: 1,
               size,
-            })
-          }
+            });
+            is.then((res) => {
+              if (!res) navigate("/signin");
+            });
+          }}
         >
           <div>🛒</div>
         </div>

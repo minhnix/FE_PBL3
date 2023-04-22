@@ -7,11 +7,27 @@ import { useState } from "react";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { BsBell } from "react-icons/bs";
 import { axios } from "../api/config";
+import { useNotification } from "../Context/Notification.context";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
 const StaffPage = () => {
   const token = localStorage.getItem("token");
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10);
   const [orders, setOrders] = useState();
+  const [notiClick, setNotiClick] = useState(false);
+
+  const {
+    numberOfUnreadNotification,
+    notifications,
+    getNotifications,
+    clearNotifications,
+    last,
+    fetchMoreNotification,
+  } = useNotification();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -36,7 +52,7 @@ const StaffPage = () => {
           style={{
             backgroundColor: "#1f1f1f",
             width: "100%",
-            marginLeft: "220px",
+            marginLeft: "250px",
             overflow: "hidden",
             minHeight: "100vh",
           }}
@@ -58,12 +74,17 @@ const StaffPage = () => {
               style={{ display: "flex", justifyContent: "right" }}
             >
               <span
+                onClick={() => {
+                  setNotiClick(!notiClick);
+                  clearNotifications();
+                  getNotifications(0, 10);
+                }}
                 className="cart-box"
-                data-value={"!"}
+                data-value={numberOfUnreadNotification}
                 style={{
                   borderRadius: "50%",
                   backgroundColor: "#222e3c",
-                  border: "1px solid white",
+                  border: "2px solid white",
                   width: "50px",
                   height: "50px",
                   display: "grid",
@@ -71,10 +92,98 @@ const StaffPage = () => {
                   marginRight: "12px",
                 }}
               >
-                <div style={{ fontSize: "24px", lineHeight: "20px" }}>
+                <div
+                  style={{
+                    fontSize: "24px",
+                    lineHeight: "20px",
+                    cursor: "pointer",
+                  }}
+                >
                   <BsBell style={{ color: "white" }}></BsBell>
                 </div>
               </span>
+              {notiClick && (
+                <div
+                  id="scrollableDiv"
+                  className="px-4"
+                  style={{
+                    position: "absolute",
+                    maxHeight: "300px",
+                    border: "2px solid white",
+                    overflowY: "auto",
+                    marginTop: "64px",
+                    backgroundColor: "rgb(30,30,30)",
+                    width: "20%",
+                    borderRadius: "15px",
+                    flexDirection: "column",
+                    color: "white",
+                    padding: 0,
+                  }}
+                >
+                  <div>
+                    <h4
+                      style={{
+                        color: "white",
+                        textAlign: "center",
+                        padding: "16px 0",
+                      }}
+                    >
+                      Thông báo
+                    </h4>
+                  </div>
+                  {/* <ul
+                    id="scrollableDiv"
+                    className="mt-3"
+                    style={{ color: "white", width: "100%", padding: 0 }}
+                  > */}
+                  {notifications && notifications.length > 0 && (
+                    <InfiniteScroll
+                      dataLength={notifications.length}
+                      next={fetchMoreNotification}
+                      hasMore={!last}
+                      loader={
+                        <h5 style={{ textAlign: "center" }}>Loading...</h5>
+                      }
+                      scrollableTarget="scrollableDiv"
+                      endMessage={
+                        <h5 style={{ textAlign: "center" }}>Hết thông báo</h5>
+                      }
+                    >
+                      {notifications.map((notification) => (
+                        <div className="mb-2 unread">
+                          <div
+                            className="p-2 flex-column"
+                            style={{
+                              display: "flex",
+                              borderRadius: "15px",
+                              backgroundColor: "rgb(50,50,50)",
+                              gap: "8px",
+                              border: "1px solid gray",
+                            }}
+                          >
+                            <ul
+                              className="px-3"
+                              onClick={() => navigate(notification.slug)}
+                            >
+                              <li>
+                                <span style={{ fontWeight: "bold" }}>
+                                  {notification.message}
+                                </span>
+                              </li>
+                              <li>
+                                <span style={{ fontSize: "12px" }}>
+                                  {moment(notification.createdAt).fromNow()}{" "}
+                                </span>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      ))}
+                    </InfiniteScroll>
+                  )}
+                  {/* </ul> */}
+                </div>
+              )}
             </Col>
           </Row>
           <Row className="faj-center" style={{ marginTop: "76px" }}>

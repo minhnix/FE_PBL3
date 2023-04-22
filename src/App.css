@@ -12,6 +12,10 @@
   margin: 0 24px;
 }
 
+/* .navbar a {
+  color: black !important;
+} */
+
 .navbar .active {
   border-bottom: 1px solid black;
 }

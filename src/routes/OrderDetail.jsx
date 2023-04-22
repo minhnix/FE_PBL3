@@ -9,11 +9,11 @@ import Col from "react-bootstrap/esm/Col";
 import OrderDetailItems from "../components/OrderDetailItems";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { axios } from "../api/config";
-import { formatDate } from "../utils/helper";
+import { formatCostNumber } from "../utils/helper";
+import moment from "moment";
 const OrderDetail = () => {
   const { id } = useParams();
   const [order, setOrder] = useState();
-  console.log("🚀 ~ OrderDetail ~ order:", order);
   const token = localStorage.getItem("token");
 
   const nav = useNavigate();
@@ -30,18 +30,18 @@ const OrderDetail = () => {
       .catch((error) => {
         console.log(error);
         if (error.response.status === 403) nav("/403");
+        if (error.response.status === 404) nav("/404");
       });
-  }, []);
+  }, [id]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(2);
+  const [postsPerPage, setPostsPerPage] = useState(5);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   let currentPosts = order?.orderDetails.slice(
     indexOfFirstPost,
     indexOfLastPost
   );
-  console.log("🚀 ~ OrderDetail ~ currentPosts:", currentPosts);
   useEffect(() => {
     localStorage.getItem("currentOrderPage")
       ? setCurrentPage(localStorage.getItem("currentOrderPage"))
@@ -87,12 +87,14 @@ const OrderDetail = () => {
                     rowGap: "16px",
                   }}
                 >
-                  <li>Date : {formatDate(order?.createdAt)}</li>
+                  <li>Date : {moment(order?.createdAt).format("LLLL")}</li>
                   <li>Status : {order?.status}</li>
-                  <li>Subtotal : {order?.subTotalCost}</li>
-                  <li>Shipping Fee : {order?.deliveryCost}</li>
-                  <li>Discount : {order?.amountDiscount}</li>
-                  <li>Total : {order?.totalCost}</li>
+                  <li>Subtotal : {formatCostNumber(order?.subTotalCost)}</li>
+                  <li>
+                    Shipping Fee : {formatCostNumber(order?.deliveryCost)}
+                  </li>
+                  <li>Discount : {formatCostNumber(order?.amountDiscount)}</li>
+                  <li>Total : {formatCostNumber(order?.totalCost)}</li>
                 </ul>
               </div>
             </div>

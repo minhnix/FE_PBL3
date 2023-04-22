@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div
@@ -18,6 +20,20 @@ const NotFound = () => {
           changed or is temporarily unvailable.
         </h3>
         <img src="/notfound.gif" alt="" />
+        <p
+          className="text403"
+          style={{
+            textAlign: "center",
+            textDecoration: "none",
+            color: "#837256",
+            fontSize: "25px",
+            fontStyle: "italic",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate(-1)}
+        >
+          Please, go back this way.
+        </p>
       </div>
     </>
   );

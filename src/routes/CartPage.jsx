@@ -13,33 +13,67 @@ import { useCart } from "../Context/Cart.context";
 import { useNavigate } from "react-router-dom";
 import { formatCostNumber } from "../utils/helper";
 import { extraDeliveryCost } from "../utils/constant";
+import { useNotification } from "../Context/Notification.context";
+import jwtDecode from "jwt-decode";
+import { toast } from "react-toastify";
 const CartPage = () => {
   const [menu, setMenu] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [districtsCode, setDistrictsCode] = useState("490");
   const [wardsCode, setWardsCode] = useState("20194");
-  const { cartItems, unCheckAll, checkAll, deleteCart, setAmountCart } =
-    useCart();
+  const [road, setRoad] = useState("");
+  const {
+    cartItems,
+    unCheckAll,
+    checkAll,
+    deleteCart,
+    setAmountCart,
+    amountCart,
+  } = useCart();
+  const { stompClient } = useNotification();
 
   const checkboxAll = useRef();
 
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  let user = null;
+  if (token) user = jwtDecode(token).user;
+
   useEffect(() => {
     axios
       .get("https://provinces.open-api.vn/api/p/48?depth=2")
       .then((response) => {
         setDistricts(response.data.districts);
       });
+    axios
+      .get("http://localhost:8080/api/v1/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setDistrictsCode(res.data?.address?.districtCode || "490");
+        setWardsCode(res.data?.address?.wardCode || "20194");
+        setRoad(res.data?.address?.road);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
+  useEffect(() => {
     axios
       .get(`https://provinces.open-api.vn/api/d/${districtsCode}?depth=2`)
       .then((response) => {
         setWards(response.data.wards);
+        setWardsCode(response.data.wards[0].code);
       });
   }, [districtsCode]);
+
+  useEffect(() => {
+    const r = amountCart > 0 && cartItems.every((item) => item.selected);
+    checkboxAll.current.checked = r;
+  }, [amountCart]);
 
   const getSubTotal = () => {
     return cartItems.reduce(
@@ -49,34 +83,70 @@ const CartPage = () => {
   };
 
   const getDiscount = () => {
-    if (cartItems.length >= 5) {
-      return 5000;
-    }
-    return 2000;
+    const orderSelected = cartItems.filter((item) => item.selected);
+    const totalCost = orderSelected.reduce(
+      (total, item) => total + item.totalCost,
+      0
+    );
+    if (totalCost > 300000) return 30000;
+    if (totalCost > 200000) return 15000;
+    if (orderSelected.length >= 5) return 10000;
+    if (totalCost > 100000) return 7000;
+    return 0;
   };
 
   const getShippingFee = () => {
-    return Number(
+    const fee = Number(
       extraDeliveryCost[districtsCode][0].hasOwnProperty(wardsCode)
         ? extraDeliveryCost[districtsCode][0][wardsCode]
         : extraDeliveryCost[districtsCode][0][
             Object.keys(extraDeliveryCost[districtsCode][0])[0]
           ]
     );
+    if (isNaN(fee)) {
+      return "Không ship";
+    } else {
+      return fee;
+    }
+  };
+
+  const notifyError = (msgErr) => {
+    toast.error(msgErr, {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      newestOnTop: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
   const deliveryCost = getShippingFee();
   const amountDiscount = getDiscount();
   const getTotal = () => {
+    if (deliveryCost === "Không ship") return deliveryCost;
     return getSubTotal() + deliveryCost - amountDiscount;
   };
 
   const handleSubmitOrder = async () => {
+    if (getTotal() === "Không ship") {
+      notifyError("Không nhận ship ở địa chỉ này");
+      return;
+    }
     const orderDetails = cartItems.filter((item) => item.selected);
-    if (orderDetails.length <= 0) return;
+    if (orderDetails.length <= 0) {
+      notifyError("Bạn chưa chọn đơn hàng!!!");
+      return;
+    }
+    const district = districts.find((item) => item.code == districtsCode)?.name;
+    const ward = wards.find((item) => item.code == wardsCode)?.name;
+    const address = road + ", " + ward + ", " + district;
     const reqBody = {
       orderDetails,
-      address: "test",
+      address,
       deliveryCost,
       amountDiscount,
     };
@@ -85,10 +155,33 @@ const CartPage = () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    sendSystemNotification(res.data.id);
     orderDetails.forEach((item) => deleteCart(item.id));
     checkboxAll.current.checked = false;
     setAmountCart(cartItems.length - orderDetails.length);
     navigate("/order-detail/" + res.data.id);
+  };
+
+  const sendSystemNotification = async (orderId) => {
+    if (stompClient) {
+      const notification = {
+        title: "Có đơn hàng mới",
+        message: "Khách hàng " + user.username + " đã đặt hàng",
+        type: "system",
+        slug: `/orders/${orderId}`,
+        toUser: {
+          id: 1,
+        },
+      };
+      const res = await axios.post("notification", notification, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      stompClient.send(
+        "/app/system-notification",
+        {},
+        JSON.stringify(res.data)
+      );
+    }
   };
 
   useEffect(() => {
@@ -151,6 +244,7 @@ const CartPage = () => {
                           unCheckAll();
                         }
                       }}
+                      defaultChecked={false}
                     />
                   </li>
                   <li style={{ width: "80px" }}>Product</li>
@@ -216,7 +310,9 @@ const CartPage = () => {
                   paddingLeft: 0,
                 }}
               >
-                <li>{`Subtotal (${cartItems.length} items) : `}</li>
+                <li>{`Subtotal (${
+                  cartItems.filter((item) => item.selected).length
+                } items) : `}</li>
                 <li>{formatCostNumber(getSubTotal())}</li>
               </ul>
               <ul
@@ -231,12 +327,11 @@ const CartPage = () => {
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <select
                     onChange={(e) => {
-                      let index = e.target.selectedIndex;
-                      console.log(e.target[index].text);
                       setDistrictsCode(e.target.value);
                     }}
                     name=""
                     id=""
+                    value={districtsCode}
                   >
                     {districts?.map((item) => (
                       <option value={item.code}>{item.name}</option>
@@ -244,12 +339,11 @@ const CartPage = () => {
                   </select>
                   <select
                     onChange={(e) => {
-                      let index = e.target.selectedIndex;
-                      console.log(e.target[index].text);
                       setWardsCode(e.target.value);
                     }}
                     name=""
                     id=""
+                    value={wardsCode}
                   >
                     {wards?.map((item) => (
                       <option value={item.code}>{item.name}</option>
@@ -264,6 +358,8 @@ const CartPage = () => {
                     type="text"
                     name=""
                     id=""
+                    value={road}
+                    onChange={(e) => setRoad(e.target.value)}
                   />
                 </div>
               </ul>
@@ -307,7 +403,9 @@ const CartPage = () => {
                 outline: "none",
                 border: "0",
               }}
-              onClick={() => handleSubmitOrder()}
+              onClick={() => {
+                handleSubmitOrder();
+              }}
             >
               Confirm
             </Button>

@@ -8,6 +8,7 @@ import Image from "react-bootstrap/esm/Image";
 import { MdSettings } from "react-icons/md";
 import { useCart } from "../Context/Cart.context";
 import { formatCostNumber, formatDate } from "../utils/helper";
+import moment from "moment/moment";
 const OrderDetailItems = (props) => {
   const { items } = props;
   const { updateCart, deleteCart, setAmountCart, checkOne, unCheckOne } =
@@ -68,6 +69,7 @@ const OrderDetailItems = (props) => {
                               props.checkboxAll.current.checked = allChecked;
                             }
                           }}
+                          defaultChecked={item.selected}
                         />
                       </li>
                     </>
@@ -81,7 +83,7 @@ const OrderDetailItems = (props) => {
                     ></img>
                   </li>
                   <li style={{ width: "80px" }}>{item.name || item.menu}</li>
-                  <li style={{ width: "80px" }}>{item.totalCost}</li>
+                  <li style={{ width: "80px" }}>{item.menuCost}</li>
                 </ul>
               </Col>
               <Col
@@ -187,7 +189,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {items.createdAt.slice(0, 10)}
+            {moment(items?.createdAt).format("MMMM Do, h:mm a")}
           </li>
           <li
             style={{
@@ -195,7 +197,7 @@ const OrderDetailItems = (props) => {
               textAlign: "center",
             }}
           >
-            {items.totalCost}
+            {formatCostNumber(items.totalCost)}
           </li>
           <li
             style={{

@@ -1,8 +1,9 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ForbiddenPage = () => {
+  const navigate = useNavigate();
   return (
     <Container>
       <div
@@ -31,7 +32,7 @@ const ForbiddenPage = () => {
           >
             Sorry!!! It's not allowed to go beyond this point!
           </span>
-          <Link
+          <p
             className="text403"
             style={{
               textAlign: "center",
@@ -39,11 +40,12 @@ const ForbiddenPage = () => {
               color: "#837256",
               fontSize: "25px",
               fontStyle: "italic",
+              cursor: "pointer",
             }}
-            to={"/"}
+            onClick={() => navigate(-1)}
           >
             Please, go back this way.
-          </Link>
+          </p>
         </div>
       </div>
     </Container>

@@ -45,6 +45,7 @@ function CartProvider(props) {
   };
 
   const addCart = async (cartReq) => {
+    if (!token) return false;
     const res = await axios.post("carts", cartReq, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -70,6 +71,7 @@ function CartProvider(props) {
       });
       setAmountCart((prev) => prev + 1);
     }
+    return await true;
   };
 
   const updateCart = (cartReq) => {
@@ -131,6 +133,7 @@ function CartProvider(props) {
   };
 
   useEffect(() => {
+    if (!token) return;
     axios
       .get("/carts", {
         headers: {

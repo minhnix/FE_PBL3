@@ -20,11 +20,8 @@ const ProfileUser = () => {
   const [postsPerPage, setPostsPerPage] = useState(5);
   const [user, setUser] = useState();
   const [orders, setOrders] = useState([]);
-  console.log("🚀 ~ ProfileUser ~ orders:", orders);
   const token = localStorage.getItem("token");
 
-  formatDate("");
-  console.log(user);
   useEffect(() => {
     axios
       .get("users/me", {
@@ -112,7 +109,7 @@ const ProfileUser = () => {
                 backgroundColor: "white",
                 borderRadius: "15px",
                 flexDirection: "column",
-                height: "50%",
+                height: "60%",
               }}
             >
               <h3 style={{ paddingTop: "10px" }}>Shipping Infomation</h3>
@@ -124,16 +121,24 @@ const ProfileUser = () => {
                     rowGap: "16px",
                   }}
                 >
-                  <li>Fullname : {user?.lastname + " " + user?.firstname}</li>
+                  <li>
+                    Fullname :{" "}
+                    {user?.lastname
+                      ? user?.lastname + " " + user?.firstname
+                      : ""}
+                  </li>
+                  <li>Username : {user?.username}</li>
                   <li>Email : {user?.email}</li>
-                  <li>Phone Number :{user?.phoneNumber}</li>
+                  <li>Phone Number : {user?.phoneNumber}</li>
                   <li>
                     Address :{" "}
-                    {user?.address?.road +
-                      " " +
-                      user?.address?.ward +
-                      " " +
-                      user?.address?.district}
+                    {user?.address
+                      ? user?.address?.road +
+                        " " +
+                        user?.address?.ward +
+                        " " +
+                        user?.address?.district
+                      : ""}
                   </li>
                 </ul>
               </div>
@@ -160,12 +165,21 @@ const ProfileUser = () => {
                   className="list-group mb-4 faj-center"
                   style={{ display: "flex" }}
                 >
-                  {orders.content?.map((item) => (
-                    <>
+                  {orders.content?.length > 0 ? (
+                    orders.content?.map((item) => (
                       <OrderDetailItems type={"profile"} items={item} />
-                    </>
-                  ))}
-                </ul>{" "}
+                    ))
+                  ) : (
+                    <p
+                      style={{
+                        paddingTop: "22px",
+                        fontSize: "17px",
+                      }}
+                    >
+                      Chưa có đơn đặt hàng
+                    </p>
+                  )}
+                </ul>
                 <div className="faj-center pb-4">
                   <PaginationControl
                     page={currentPage}

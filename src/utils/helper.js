@@ -1,5 +1,6 @@
 export function formatCostNumber(val) {
   if (val === undefined || val === null) return null;
+  if (isNaN(val)) return val;
   // remove sign if negative
   var sign = 1;
   if (val < 0) {
@@ -32,6 +33,5 @@ export function formatDate(date) {
   const time = date.substring(11, 16);
   const a = date.substring(0, 10);
   const result = time + " " + a.split("-").reverse().join("/");
-  console.log(result);
   return result;
 }

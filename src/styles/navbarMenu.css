@@ -60,7 +60,7 @@ a {
 .noti-box {
   position: absolute;
   width: 250px;
-  min-height: 130px;
+  min-height: 100px;
   border-radius: 15px;
   background-color: #ceb195;
   border: 2px solid #ffe7c8;
@@ -71,9 +71,9 @@ a {
   z-index: 9999;
 }
 
-.show-nav {
+/* .show-nav {
   animation: visible 0.5s forwards;
-}
+} */
 
 .hide-userForm {
   display: none !important;

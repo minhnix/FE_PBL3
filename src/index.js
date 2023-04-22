@@ -32,13 +32,13 @@ import jwtDecode from "jwt-decode";
 import { CartProvider } from "./Context/Cart.context";
 import ForbidentPage from "./routes/ForbiddenPage";
 import ForbiddenPage from "./routes/ForbiddenPage";
+import { NotificationProvider } from "./Context/Notification.context";
 
 const token = localStorage.getItem("token");
 let role = "";
 if (token) {
   const { user } = jwtDecode(token);
   role = user.role[0].name;
-  console.log(user);
 }
 const router = createBrowserRouter([
   {
@@ -78,7 +78,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/edit-profile",
-    element: <EditProfile></EditProfile>,
+    element:
+      role === "ROLE_CUSTOMER" ? (
+        <EditProfile></EditProfile>
+      ) : (
+        <Navigate to="/" />
+      ),
   },
   {
     path: "/cart",
@@ -125,13 +130,24 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <CartProvider>
-    <RouterProvider router={router}>
-      <App />
-    </RouterProvider>
-  </CartProvider>
-);
+if (!token)
+  root.render(
+    <NotificationProvider>
+      <CartProvider>
+        <RouterProvider router={router}></RouterProvider>
+        {/* <App></App> */}
+      </CartProvider>
+    </NotificationProvider>
+  );
+else
+  root.render(
+    <NotificationProvider>
+      <CartProvider>
+        <RouterProvider router={router}></RouterProvider>
+        <App></App>
+      </CartProvider>
+    </NotificationProvider>
+  );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
