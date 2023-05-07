@@ -37,9 +37,9 @@ const Menu = () => {
       ?.parentElement.classList.add("active");
     let cid = getCid[type];
     axios
-      .get(`/menu/search?q=${debounce}&cid=${cid}`)
+      .get(`/menu?keyword=${debounce}&cid=${cid}`)
       .then((res) => {
-        setMenu(res.data);
+        setMenu(res.data.content);
       })
       .catch((err) => console.log(err));
   }, [debounce, type]);
@@ -117,7 +117,7 @@ const Menu = () => {
 
           <Col xl={9} sm={12}>
             <Row className="mt-4" style={{ rowGap: "48px" }}>
-              {menu.map((menu) => (
+              {menu?.map((menu) => (
                 <Col
                   key={menu.id}
                   lg={4}

@@ -45,6 +45,8 @@ function CartProvider(props) {
   };
 
   const addCart = async (cartReq) => {
+    console.log(cartReq);
+    console.log(cartItems);
     if (!token) return false;
     const res = await axios.post("carts", cartReq, {
       headers: {

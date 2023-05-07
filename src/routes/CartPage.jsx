@@ -168,7 +168,7 @@ const CartPage = () => {
     orderDetails.forEach((item) => deleteCart(item.id));
     checkboxAll.current.checked = false;
     setAmountCart(cartItems.length - orderDetails.length);
-    navigate("/order-detail/" + res.data.id);
+    navigate("/order/" + res.data.id);
   };
 
   const sendSystemNotification = async (orderId) => {

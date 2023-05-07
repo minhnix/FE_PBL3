@@ -561,9 +561,7 @@ const NavbarMenu = (props) => {
                       borderBottom: "1px solid gray",
                       cursor: "pointer",
                     }}
-                    onClick={() =>
-                      navigate(`/order-detail/${notification.slug}`)
-                    }
+                    onClick={() => navigate(`/order/${notification.slug}`)}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {notification.type !== "FAILED" ? (
