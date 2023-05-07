@@ -89,9 +89,9 @@ const CartPage = () => {
       0
     );
     if (totalCost > 300000) return 30000;
-    if (totalCost > 200000) return 15000;
-    if (orderSelected.length >= 5) return 10000;
-    if (totalCost > 100000) return 7000;
+    if (totalCost > 200000) return 17000;
+    if (orderSelected.length >= 5) return 12000;
+    if (totalCost > 100000) return 9000;
     return 0;
   };
 
@@ -141,6 +141,15 @@ const CartPage = () => {
       notifyError("Bạn chưa chọn đơn hàng!!!");
       return;
     }
+
+    const menuDeleted = orderDetails.filter((item) => item.deleted);
+    if (menuDeleted.length > 0) {
+      menuDeleted.forEach((item) =>
+        notifyError(`${item.name} đã không còn bán. Vui lòng chọn món khác`)
+      );
+      return;
+    }
+
     const district = districts.find((item) => item.code == districtsCode)?.name;
     const ward = wards.find((item) => item.code == wardsCode)?.name;
     const address = road + ", " + ward + ", " + district;
@@ -168,7 +177,7 @@ const CartPage = () => {
         title: "Có đơn hàng mới",
         message: "Khách hàng " + user.username + " đã đặt hàng",
         type: "system",
-        slug: `/orders/${orderId}`,
+        slug: `${orderId}`,
         toUser: {
           id: 1,
         },

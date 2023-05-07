@@ -108,12 +108,13 @@ const StaffPage = () => {
                   className="px-4"
                   style={{
                     position: "absolute",
-                    maxHeight: "300px",
+                    maxHeight: "350px",
                     border: "2px solid white",
                     overflowY: "auto",
                     marginTop: "64px",
                     backgroundColor: "rgb(30,30,30)",
-                    width: "20%",
+                    // width: "20%",
+                    maxWidth: "390px",
                     borderRadius: "15px",
                     flexDirection: "column",
                     color: "white",
@@ -215,14 +216,14 @@ const StaffPage = () => {
               ))}
               <PaginationControl
                 page={currentPage}
-                between={3}
+                between={4}
                 total={orders?.totalElements}
                 limit={postsPerPage}
                 changePage={(currentPage) => {
                   setCurrentPage(currentPage);
                 }}
                 last={true}
-                ellipsis={0}
+                ellipsis={1}
               />
             </Col>
           </Row>

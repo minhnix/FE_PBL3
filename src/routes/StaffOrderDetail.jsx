@@ -42,7 +42,7 @@ const StaffOrderDetail = () => {
     if (type === "success")
       toast.success(msg, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         newestOnTop: true,
         closeOnClick: true,
@@ -54,7 +54,7 @@ const StaffOrderDetail = () => {
     else if (type === "error")
       toast.error(msg, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         newestOnTop: true,
         closeOnClick: true,
@@ -66,7 +66,7 @@ const StaffOrderDetail = () => {
     else if (type === "info")
       toast.info(msg, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         newestOnTop: true,
         closeOnClick: true,
@@ -191,7 +191,7 @@ const StaffOrderDetail = () => {
           notify("Đơn hàng này đã được nhận!!!", "info");
         }
       });
-  }, []);
+  }, [id]);
   return (
     <>
       <div style={{ display: "flex" }}>

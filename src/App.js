@@ -28,7 +28,7 @@ function App({ children }) {
         `/user/${userId}/notification`,
         onUserNotificationReceived
       );
-    } else {
+    } else if (role && role === "ROLE_STAFF") {
       stompClient.subscribe(
         "/system/notification",
         onSystemNotificationReceived
