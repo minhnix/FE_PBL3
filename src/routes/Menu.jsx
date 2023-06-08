@@ -37,7 +37,7 @@ const Menu = () => {
       ?.parentElement.classList.add("active");
     let cid = getCid[type];
     axios
-      .get(`/menu?keyword=${debounce}&cid=${cid}`)
+      .get(`/menu?keyword=${debounce}&cid=${cid}&size=50`)
       .then((res) => {
         setMenu(res.data.content);
       })
@@ -87,7 +87,7 @@ const Menu = () => {
           <h1 style={{ textAlign: "center", margin: "48px 0" }}>
             Our Products
           </h1>
-          <h3 style={{ textAlign: "center", marginBottom: "24px" }}>{type}</h3>
+          {/* <h3 style={{ textAlign: "center", marginBottom: "24px" }}>{type}</h3> */}
           <Col
             lg={3}
             sm={12}

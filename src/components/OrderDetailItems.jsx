@@ -207,7 +207,7 @@ const OrderDetailItems = (props) => {
             {items.status}
           </li>
           <li>
-            <Link to={`/order-detail/${items.id}`}>
+            <Link to={`/order/${items.id}`}>
               <i class="bi bi-gear"></i>
             </Link>
           </li>

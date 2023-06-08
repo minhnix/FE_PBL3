@@ -152,6 +152,10 @@ const CartPage = () => {
 
     const district = districts.find((item) => item.code == districtsCode)?.name;
     const ward = wards.find((item) => item.code == wardsCode)?.name;
+    if (road == null || road == "") {
+      notifyError("Bạn chưa nhập địa chỉ!!!");
+      return;
+    }
     const address = road + ", " + ward + ", " + district;
     const reqBody = {
       orderDetails,
@@ -198,7 +202,7 @@ const CartPage = () => {
       navigate("/signin");
     }
     axios
-      .get(`/menu`)
+      .get(`/menu?size=12`)
       .then((res) => {
         setMenu(res.data.content);
       })
