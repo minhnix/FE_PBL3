@@ -1,13 +1,23 @@
 import jwtDecode from "jwt-decode";
 import "./App.css";
 import { useNotification } from "./Context/Notification.context";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
+import { NotificationToast } from "./components/NotificationToast";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./routes/HomePage";
+import NotFound from "./routes/NotFound";
+import Menu from "./routes/Menu";
+import ProfileUser from "./routes/ProfileUser";
+import OrderDetail from "./routes/OrderDetail";
+import EditProfile from "./routes/EditProfile";
+import CartPage from "./routes/CartPage";
+import SignIn from "./routes/SignIn";
+import SignUp from "./routes/SignUp";
 
-function App({ children }) {
+function App() {
   const token = localStorage.getItem("token");
   let role = null;
   let userId = null;
@@ -40,14 +50,28 @@ function App({ children }) {
     const data = JSON.parse(payload.body);
     setNumberOfUnreadNotification((prev) => prev + 1);
     setNotifications((prev) => [data, ...prev]);
-    toast(data.message);
+    toast(
+      <NotificationToast text={data.message} slug={`/order/${data.slug}`} />,
+      {
+        position: "bottom-left",
+        autoClose: false,
+        className: "notification-toast",
+      }
+    );
   };
 
   const onSystemNotificationReceived = (payload) => {
     const data = JSON.parse(payload.body);
     setNumberOfUnreadNotification((prev) => prev + 1);
     setNotifications((prev) => [data, ...prev]);
-    toast(data.message);
+    toast(
+      <NotificationToast text={data.message} slug={`/order/${data.slug}`} />,
+      {
+        position: "bottom-left",
+        autoClose: false,
+        className: "notification-toast",
+      }
+    );
   };
 
   useEffect(() => {
@@ -58,22 +82,22 @@ function App({ children }) {
     }
   }, []);
 
-  if (!token) return { children };
   return (
     <>
-      {children}
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <Suspense fallback={<p></p>}>
+        <Routes>
+          <Route path="/" element={<HomePage></HomePage>}></Route>
+          <Route path="*" element={<NotFound />}></Route>
+          <Route path="/menu" element={<Menu />}></Route>
+          <Route path="/profile" element={<ProfileUser />}></Route>
+          <Route path="/cart" element={<CartPage />}></Route>
+          <Route path="/order/:id" element={<OrderDetail />}></Route>
+          <Route path="/edit-profile" element={<EditProfile />}></Route>
+          <Route path="/signin" element={<SignIn />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/not-found" element={<NotFound></NotFound>}></Route>
+        </Routes>
+      </Suspense>
     </>
   );
 }

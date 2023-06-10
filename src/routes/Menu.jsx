@@ -24,7 +24,59 @@ const Menu = () => {
     Drink: 2,
     All: "",
   };
-
+  const contacts = [
+    {
+      image: "./phone.png",
+      title: (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p style={{ margin: "8px 8px" }}>0989 8659 785 </p>
+          <p style={{ margin: "8px 8px" }}>0236 3842 308</p>
+          <p style={{ margin: "8px 8px" }}>0236 3842 308</p>
+        </div>
+      ),
+    },
+    {
+      image: "./clock.png",
+      title: (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          <h5 style={{ margin: "8px 8px" }}>7h - 12h</h5>
+          <h5 style={{ margin: "8px 8px" }}>12h - 18h</h5>
+          <h5 style={{ margin: "8px 8px" }}>18h - 24h</h5>
+        </div>
+      ),
+    },
+    {
+      image: "./map.png",
+      title: (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          <p style={{ margin: "8px 8px" }}>54 Nguyễn Lương Bằng </p>
+          <p style={{ margin: "8px 8px" }}>Hòa Khánh Bắc</p>
+          <p style={{ margin: "8px 8px" }}>Liên Chiểu</p>
+        </div>
+      ),
+    },
+  ];
   const debounce = useDebounce(search, 500);
 
   useEffect(() => {
@@ -130,7 +182,11 @@ const Menu = () => {
             </Row>
           </Col>
         </Row>
-        <HomePageItems id={"contact"} title={"Contact Us"}></HomePageItems>
+        <HomePageItems
+          id={"contact"}
+          title={"Contact Us"}
+          contents={contacts}
+        ></HomePageItems>
       </Container>
       <Footer isHomePage={false}></Footer>
     </>

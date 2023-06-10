@@ -4,11 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import {
+  BrowserRouter,
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
 
+import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./routes/HomePage";
 import SignIn from "./routes/SignIn";
@@ -33,6 +35,7 @@ import { CartProvider } from "./Context/Cart.context";
 import ForbidentPage from "./routes/ForbiddenPage";
 import ForbiddenPage from "./routes/ForbiddenPage";
 import { NotificationProvider } from "./Context/Notification.context";
+import { ToastContainer } from "react-toastify";
 
 const token = localStorage.getItem("token");
 let role = "";
@@ -130,24 +133,59 @@ const router = createBrowserRouter([
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-if (!token)
-  root.render(
-    <NotificationProvider>
-      <CartProvider>
-        <RouterProvider router={router}></RouterProvider>
-        {/* <App></App> */}
-      </CartProvider>
-    </NotificationProvider>
-  );
-else
-  root.render(
-    <NotificationProvider>
-      <CartProvider>
-        <RouterProvider router={router}></RouterProvider>
-        <App></App>
-      </CartProvider>
-    </NotificationProvider>
-  );
+// if (!token)
+//   root.render(
+//     <NotificationProvider>
+//       <CartProvider>
+//         <RouterProvider router={router}></RouterProvider>
+//         {/* <App></App> */}
+//       </CartProvider>
+//     </NotificationProvider>
+//   );
+// else
+// root.render(
+//   <NotificationProvider>
+//     <CartProvider>
+//       <RouterProvider router={router}>
+//         <App>
+//           <ToastContainer
+//             position="bottom-left"
+//             autoClose={5000}
+//             hideProgressBar={true}
+//             newestOnTop={true}
+//             closeOnClick
+//             rtl={false}
+//             pauseOnFocusLoss
+//             draggable
+//             pauseOnHover
+//             theme="light"
+//           />
+//         </App>
+//       </RouterProvider>
+//     </CartProvider>
+//   </NotificationProvider>
+// );
+root.render(
+  <NotificationProvider>
+    <CartProvider>
+      <BrowserRouter>
+        <App />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
+      </BrowserRouter>
+    </CartProvider>
+  </NotificationProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

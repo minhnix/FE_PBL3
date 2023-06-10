@@ -29,8 +29,13 @@ const OrderDetail = () => {
       })
       .catch((error) => {
         console.log(error);
-        if (error.response.status === 403) nav("/403");
-        if (error.response.status === 404) nav("/404");
+        if (
+          error.response.status === 403 ||
+          error.response.status === 401 ||
+          error.response.status === 404 ||
+          error.response.status === 400
+        )
+          nav("/401");
       });
   }, [id]);
 
