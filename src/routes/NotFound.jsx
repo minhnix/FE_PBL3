@@ -30,7 +30,7 @@ const NotFound = () => {
             fontStyle: "italic",
             cursor: "pointer",
           }}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
         >
           Please, go back this way.
         </p>

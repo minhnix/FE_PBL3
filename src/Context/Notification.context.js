@@ -44,6 +44,18 @@ function NotificationProvider(props) {
     setNotifications([]);
     setNotificationPage(1);
   };
+  const changeToRead = (id) => {
+    fetch(`http://localhost:8080/api/v1/notification/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.id) setNumberOfUnreadNotification((prev) => prev - 1);
+      });
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -94,6 +106,7 @@ function NotificationProvider(props) {
     setNumberOfUnreadNotification,
     setNotifications,
     getNotifications,
+    changeToRead,
     clearNotifications,
     notificationPage,
     setNotificationPage,

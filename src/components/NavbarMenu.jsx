@@ -5,6 +5,8 @@ import Navbar from "react-bootstrap/Navbar";
 import Image from "react-bootstrap/Image";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/navbarMenu.css";
+import { RxDotFilled } from "react-icons/rx";
+
 import {
   AiOutlineHome,
   AiOutlineUser,
@@ -39,6 +41,7 @@ const NavbarMenu = (props) => {
     getNotifications,
     clearNotifications,
     last,
+    changeToRead,
     fetchMoreNotification,
   } = useNotification();
 
@@ -561,7 +564,11 @@ const NavbarMenu = (props) => {
                       borderBottom: "1px solid gray",
                       cursor: "pointer",
                     }}
-                    onClick={() => navigate(`/order/${notification.slug}`)}
+                    onClick={() => {
+                      if (notification.watched === false)
+                        changeToRead(notification.id);
+                      navigate(`/order/${notification.slug}`);
+                    }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {notification.type !== "FAILED" ? (
@@ -585,6 +592,15 @@ const NavbarMenu = (props) => {
                         {moment(notification.createdAt).fromNow()}
                       </span>
                     </div>
+                    <span
+                      style={{
+                        color: "rgb(86 134 211)",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {!notification.watched && <RxDotFilled size={30} />}
+                    </span>
                   </div>
                 ))}
               </InfiniteScroll>
