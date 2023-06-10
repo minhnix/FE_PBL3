@@ -208,7 +208,7 @@ const OrderDetailItems = (props) => {
           </li>
           <li>
             <Link to={`/order/${items.id}`}>
-              <i class="bi bi-gear"></i>
+              <i class="bi bi-eye"></i>
             </Link>
           </li>
         </ul>
