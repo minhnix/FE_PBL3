@@ -16,6 +16,9 @@ import EditProfile from "./routes/EditProfile";
 import CartPage from "./routes/CartPage";
 import SignIn from "./routes/SignIn";
 import SignUp from "./routes/SignUp";
+import Forgot from "./routes/ForgotPassWord";
+import Reset from "./routes/ResetPassWord";
+import Password from "./routes/Password";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -93,8 +96,11 @@ function App() {
           <Route path="/cart" element={<CartPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />}></Route>
           <Route path="/edit-profile" element={<EditProfile />}></Route>
+          <Route path="/edit-password" element={<Password />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
+          <Route path="/forgot" element={<Forgot />}></Route>
+          <Route path="/reset" element={<Reset />}></Route>
           <Route path="/not-found" element={<NotFound></NotFound>}></Route>
         </Routes>
       </Suspense>
