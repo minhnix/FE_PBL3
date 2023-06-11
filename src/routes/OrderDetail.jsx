@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import NavbarMenu from "../components/NavbarMenu";
 import Footer from "../components/Footer";
@@ -17,6 +17,28 @@ const OrderDetail = () => {
   const token = localStorage.getItem("token");
 
   const nav = useNavigate();
+
+  const handleReOrder = async () => {
+    console.log(order);
+    const requests = order.orderDetails.map((item) => {
+      return createCart({
+        menuId: item.menuId,
+        quantity: item.quantity,
+        size: item.menuSize,
+      });
+    });
+    Promise.all(requests);
+  };
+
+  const createCart = async (cart) => {
+    console.log("🚀 ~ createCart ~ cart:", cart);
+    axios.post("http://localhost:8080/api/v1/carts", cart, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  };
+
   useEffect(() => {
     axios
       .get("orders/" + id, {
@@ -84,7 +106,14 @@ const OrderDetail = () => {
               }}
             >
               <h3 style={{ justifyContent: "self-start" }}>Order Summary</h3>
-              <div style={{ alignSelf: "self-start" }}>
+              <div
+                style={{
+                  alignSelf: "self-start",
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
                 <ul
                   style={{
                     display: "flex",
@@ -101,6 +130,28 @@ const OrderDetail = () => {
                   <li>Discount : {formatCostNumber(order?.amountDiscount)}</li>
                   <li>Total : {formatCostNumber(order?.totalCost)}</li>
                 </ul>
+                <Link
+                  to="/cart"
+                  reloadDocument
+                  style={{
+                    // alignItems: "center",
+                    margin: "auto",
+                  }}
+                >
+                  <button
+                    onClick={handleReOrder}
+                    style={{
+                      backgroundColor: "#CEB195",
+                      outline: "none",
+                      border: "0",
+                      padding: "8px 20px",
+                      borderRadius: "5px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Repurchase
+                  </button>
+                </Link>
               </div>
             </div>
           </Col>
@@ -123,6 +174,7 @@ const OrderDetail = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   height: "100%",
+                  width: "100%",
                 }}
               >
                 <ul

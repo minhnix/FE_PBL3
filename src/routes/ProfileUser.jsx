@@ -97,6 +97,19 @@ const ProfileUser = () => {
                 </Button>
               </Link>
             </div>
+            <div className="mt-4 shadow-box" style={{ borderRadius: "15px" }}>
+              <Link to="/edit-password">
+                <Button
+                  style={{
+                    backgroundColor: "#CEB195",
+                    outline: "none",
+                    border: "0",
+                  }}
+                >
+                  Change password
+                </Button>
+              </Link>
+            </div>
           </Col>
           <Col
             lg={8}

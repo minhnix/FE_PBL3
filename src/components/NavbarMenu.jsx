@@ -567,6 +567,7 @@ const NavbarMenu = (props) => {
                     onClick={() => {
                       if (notification.watched === false)
                         changeToRead(notification.id);
+                      setNotiClick(false);
                       navigate(`/order/${notification.slug}`);
                     }}
                   >

@@ -7,9 +7,10 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { axios } from "../api/config";
 
-const SignIn = () => {
-  const [username, setUsername] = useState("");
+const ChangePassword = () => {
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   const [error, setError] = useState({});
   const navigate = useNavigate();
   const handleShowPassword = () => {
@@ -17,25 +18,18 @@ const SignIn = () => {
       ? (document.querySelector("#Password").type = "password")
       : (document.querySelector("#Password").type = "text");
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const body = {
-      usernameOrEmail: username,
-      password,
-    };
-    const res = await axios
-      .post("/auth/login", body)
-      .then((response) => response)
-      .catch((error) => error.response);
-    if (res.status === 200) {
-      localStorage.setItem("token", res.data.accessToken);
-      navigate("/");
-      window.location.reload();
-    } else if (res.status === 401) {
-      setError(res.data);
-    } else if (res.status === 400) {
-      setError(res.data);
+  const handleSetPassWord = () => {
+    const code = document.querySelector(".password");
+    // code.style.display = "block";
+    const email = document.querySelector(".newpassword");
+    const error = document.querySelector(".MessageError");
+    // email.style.display = "none";
+    if (password !== newPassword) {
+      //code to reset password
+      error.style.display = "block";
+    } else {
+      error.style.display = "none";
+      navigate("/signin");
     }
   };
 
@@ -45,10 +39,12 @@ const SignIn = () => {
         <div className="form-box">
           <Row style={{ color: "white" }}>
             <Col lg={7} sm={12} className="p-4">
-              <h1 style={{ textAlign: "center", color: "white" }}>Login</h1>
-              <form
-                onSubmit={(e) => handleSubmit(e)}
-                action=""
+              <h1 style={{ textAlign: "center", color: "white" }}>
+                Reset password
+              </h1>
+              <div
+                // onSubmit={(e) => handleSubmit(e)}
+                // action=""
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -57,73 +53,70 @@ const SignIn = () => {
                 }}
               >
                 <div className="form-input-box">
-                  <div style={{ position: "relative" }}>
-                    <label style={{ position: "absolute" }} htmlFor="Username">
-                      <i
-                        style={{ marginRight: "12px" }}
-                        class="bi bi-person-circle"
-                      ></i>
-                      Username
-                    </label>
-                    <input
-                      onChange={(e) => setUsername(e.target.value)}
-                      type="text"
-                      name=""
-                      style={{
-                        width: "100%",
-                        marginTop: "24px",
-                        padding: "0px 12px",
-                      }}
-                      placeholder="Enter your username"
-                      id="Username"
-                    />
-                    <span style={{ color: "#FA9884" }}>
-                      {error.usernameOrEmail ||
-                        (error?.message ? error?.message : null)}
-                    </span>
-                  </div>
-                  <div style={{ position: "relative" }}>
-                    <label style={{ position: "absolute" }} htmlFor="Password">
+                  <div className="password" style={{ position: "relative" }}>
+                    <label style={{}} htmlFor="Password">
                       <i style={{ marginRight: "12px" }} class="bi bi-lock"></i>
-                      Password
+                      Enter new password
                     </label>
                     <input
                       onChange={(e) => setPassword(e.target.value)}
-                      type="password"
                       name=""
                       style={{
                         width: "100%",
-                        marginTop: "24px",
+                        marginTop: "8px",
                         padding: "0px 12px",
                       }}
                       placeholder="Enter your password"
                       id="Password"
                     />
-                    {password ? (
-                      <i
-                        className="fa-solid fa-eye registry__eye"
-                        onClick={(e) => handleShowPassword(e.target)}
-                        id="input-icon"
-                        style={{
-                          width: "",
-                          height: "",
-                          position: "absolute",
-                          right: "0.5rem",
-                          top: "1.5rem",
-                          bottom: 0,
-                          margin: "auto 0",
-                          fontSize: 18,
-                          cursor: "pointer",
-                        }}
-                      />
-                    ) : null}
+                    <span style={{ color: "#FA9884" }}>
+                      {error.password ||
+                        (error?.message ? error?.message : null)}
+                    </span>
+                  </div>
+                  <div className="newpassword" style={{ position: "relative" }}>
+                    <label style={{ position: "absolute" }} htmlFor="Password">
+                      <i style={{ marginRight: "12px" }} class="bi bi-lock"></i>
+                      Confirm your new password
+                    </label>
+                    <input
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      name=""
+                      style={{
+                        width: "100%",
+                        marginTop: "40px",
+                        padding: "0px 12px",
+                      }}
+                      placeholder="Enter your password"
+                      id="Password"
+                    />
                     <span style={{ color: "#FA9884" }}>
                       {error.password ||
                         (error?.message ? error?.message : null)}
                     </span>
                   </div>
                 </div>
-                <button>
+                <div
+                  className="MessageError"
+                  style={{ position: "relative", display: "none" }}
+                >
+                  <label
+                    style={{ margin: "8px 0 16px", color: "red" }}
+                    htmlFor="Password"
+                  >
+                    Looks like you entered the wrong new password
+                  </label>
+
+                  <span style={{ color: "#FA9884" }}>
+                    {error.password || (error?.message ? error?.message : null)}
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    handleSetPassWord();
+                  }}
+                >
                   <i class="bi bi-arrow-right"></i>
                 </button>
 
@@ -142,17 +135,21 @@ const SignIn = () => {
                     </Link>
                   </p>
                 </div>
-                <div style={{ marginTop: "4px" }}>
+                <div style={{ marginTop: "0px" }}>
                   <p>
                     <Link
-                      style={{ textDecoration: "none", color: "#80BBFF" }}
-                      to="/forgot"
+                      style={{
+                        textDecoration: "none",
+                        color: "white !important",
+                        marginLeft: "16px",
+                      }}
+                      to="/signin"
                     >
-                      Forgotten password ?
+                      Sign In Now !
                     </Link>
                   </p>
                 </div>
-              </form>
+              </div>
             </Col>
             <Col lg={5} sm={0} className="imgDeco">
               <Image
@@ -167,4 +164,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ChangePassword;

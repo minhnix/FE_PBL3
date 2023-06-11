@@ -31,9 +31,19 @@ const Footer = (props) => {
                 style={{
                   textAlign: "center",
                   fontSize: "20px",
+                  color: "white !important",
                 }}
               >
-                <a href="/#home">Home</a>
+                <a
+                  style={{
+                    textAlign: "center",
+                    fontSize: "20px",
+                    color: "white !important",
+                  }}
+                  href="/#home"
+                >
+                  Home
+                </a>
               </li>
               <li
                 style={{
