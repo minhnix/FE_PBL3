@@ -106,7 +106,14 @@ const OrderDetail = () => {
               }}
             >
               <h3 style={{ justifyContent: "self-start" }}>Order Summary</h3>
-              <div style={{ alignSelf: "self-start" }}>
+              <div
+                style={{
+                  alignSelf: "self-start",
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
                 <ul
                   style={{
                     display: "flex",
@@ -123,9 +130,26 @@ const OrderDetail = () => {
                   <li>Discount : {formatCostNumber(order?.amountDiscount)}</li>
                   <li>Total : {formatCostNumber(order?.totalCost)}</li>
                 </ul>
-                <Link to="/cart" reloadDocument>
-                  <button onClick={handleReOrder} style={{}}>
-                    Đặt lại
+                <Link
+                  to="/cart"
+                  reloadDocument
+                  style={{
+                    // alignItems: "center",
+                    margin: "auto",
+                  }}
+                >
+                  <button
+                    onClick={handleReOrder}
+                    style={{
+                      backgroundColor: "#CEB195",
+                      outline: "none",
+                      border: "0",
+                      padding: "8px 20px",
+                      borderRadius: "5px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    Repurchase
                   </button>
                 </Link>
               </div>
@@ -150,6 +174,7 @@ const OrderDetail = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   height: "100%",
+                  width: "100%",
                 }}
               >
                 <ul

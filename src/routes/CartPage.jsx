@@ -175,19 +175,19 @@ const CartPage = () => {
   };
 
   const sendSystemNotification = async (orderId) => {
+    const notification = {
+      title: "Có đơn hàng mới",
+      message: "Khách hàng " + user.username + " đã đặt hàng",
+      type: "system",
+      slug: `${orderId}`,
+      toUser: {
+        id: 1,
+      },
+    };
+    const res = await axios.post("notification", notification, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (stompClient) {
-      const notification = {
-        title: "Có đơn hàng mới",
-        message: "Khách hàng " + user.username + " đã đặt hàng",
-        type: "system",
-        slug: `${orderId}`,
-        toUser: {
-          id: 1,
-        },
-      };
-      const res = await axios.post("notification", notification, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
       stompClient.send(
         "/app/system-notification",
         {},
@@ -201,7 +201,7 @@ const CartPage = () => {
       navigate("/signin");
     }
     axios
-      .get(`/menu?size=12`)
+      .get(`/menu?size=9`)
       .then((res) => {
         setMenu(res.data.content);
       })

@@ -18,35 +18,56 @@ const Password = () => {
 
   const navigate = useNavigate();
 
+  const handleShowPassword = () => {
+    const hidden = document.querySelectorAll(".Password");
+    for (let i = 0; i < hidden.length; i++) {
+      if (hidden[i].type == "password") {
+        hidden[i].type = "text";
+      } else {
+        hidden[i].type = "password";
+      }
+    }
+    // document.querySelector(".Password").type === "text"
+    //   ? (document.querySelector(".Password").type = "password")
+    //   : (document.querySelector(".Password").type = "text");
+  };
+
   const handleEditPassword = async () => {
-    if (validatePassword(newPassword, confirmPassword)) {
-      const body = {
-        oldPassword: password,
-        newPassword,
-      };
-      try {
-        const res = await axios.put(
-          `http://localhost:8080/api/v1/users/password`,
-          body,
-          {
-            headers: {
-              Authorization: `Bearer ${token}}`,
-            },
-          }
-        );
-        toast.success("Password updated successfully");
-        navigate("/profile");
-      } catch (error) {
-        console.log("🚀 ~ handleEditPassword ~ error:", error);
-        setErrorMsg(error.response.data.message);
+    if (!checkPassword(newPassword, password)) {
+      if (validatePassword(newPassword, confirmPassword)) {
+        const body = {
+          oldPassword: password,
+          newPassword,
+        };
+        try {
+          const res = await axios.put(
+            `http://localhost:8080/api/v1/users/password`,
+            body,
+            {
+              headers: {
+                Authorization: `Bearer ${token}}`,
+              },
+            }
+          );
+          toast.success("Password updated successfully");
+          navigate("/profile");
+        } catch (error) {
+          console.log("🚀 ~ handleEditPassword ~ error:", error);
+          setErrorMsg(error.response.data.message);
+        }
+      } else {
+        setErrorMsg("Looks like you entered the wrong confirm password");
       }
     } else {
-      setErrorMsg("Looks like you entered the wrong new password");
+      setErrorMsg("The new password must be different from the old password");
     }
   };
 
   const validatePassword = (newPassword, confirmPassword) => {
     return newPassword === confirmPassword;
+  };
+  const checkPassword = (newPassword, oldPassword) => {
+    return newPassword === oldPassword;
   };
 
   return (
@@ -69,11 +90,11 @@ const Password = () => {
             }}
           >
             <h1>Edit your password</h1>
-            <div className="faj-center" style={{ width: "70%" }}>
+            <div className="faj-center" style={{ width: "calc(50% - 15px)" }}>
               <input
-                className="password"
+                className="password Password"
                 placeholder="Old password"
-                type="text"
+                type="password"
                 style={{
                   width: "80%",
                   padding: "0 12px",
@@ -85,15 +106,35 @@ const Password = () => {
                   setPassword(e.target.value);
                 }}
               />
+              {password ? (
+                <i
+                  className="fa-solid fa-eye registry__eye"
+                  onClick={(e) => handleShowPassword(e.target)}
+                  id="input-icon"
+                  style={{
+                    width: "15px",
+                    height: "",
+                    bottom: 0,
+                    margin: "auto 0",
+                    fontSize: 18,
+                    cursor: "pointer",
+                  }}
+                />
+              ) : null}
             </div>
-            <div className="faj-center" style={{ width: "70%" }}>
+            <div
+              className="faj-center"
+              style={{ width: "calc(50% )", position: "relative" }}
+            >
               <input
-                className="password"
+                className="password Password"
                 placeholder="New password"
-                type="text"
+                type="password"
                 style={{
                   width: "80%",
                   padding: "0 12px",
+                  right: 0,
+                  top: 0,
                   border: "none",
                   outline: "none",
                   borderBottom: "1px solid #B0906F",
@@ -104,11 +145,11 @@ const Password = () => {
               />
             </div>
 
-            <div className="faj-center" style={{ width: "70%" }}>
+            <div className="faj-center" style={{ width: "50%" }}>
               <input
-                className="newpassword"
+                className="newpassword Password"
                 placeholder="Confirm new password"
-                type="text"
+                type="password"
                 style={{
                   width: "80%",
                   padding: "0 12px",
