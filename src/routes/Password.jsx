@@ -7,29 +7,46 @@ import Col from "react-bootstrap/esm/Col";
 import PagePresent from "../components/PagePresent";
 import Button from "react-bootstrap/esm/Button";
 import { Link, useNavigate } from "react-router-dom";
-
 import axios from "axios";
 import { toast } from "react-toastify";
 const Password = () => {
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const navigate = useNavigate();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const token = localStorage.getItem("token");
 
-  const handleEditPassword = () => {
-    const code = document.querySelector(".password");
-    // code.style.display = "block";
-    const email = document.querySelector(".newpassword");
-    const error = document.querySelector(".MessageError");
-    // email.style.display = "none";
-    if (password !== newPassword || !password || !newPassword) {
-      //code to reset password
-      error.style.display = "block";
+  const navigate = useNavigate();
+
+  const handleEditPassword = async () => {
+    if (validatePassword(newPassword, confirmPassword)) {
+      const body = {
+        oldPassword: password,
+        newPassword,
+      };
+      try {
+        const res = await axios.put(
+          `http://localhost:8080/api/v1/users/password`,
+          body,
+          {
+            headers: {
+              Authorization: `Bearer ${token}}`,
+            },
+          }
+        );
+        toast.success("Password updated successfully");
+        navigate("/profile");
+      } catch (error) {
+        console.log("🚀 ~ handleEditPassword ~ error:", error);
+        setErrorMsg(error.response.data.message);
+      }
     } else {
-      error.style.display = "none";
-      toast.success("Cập nhật mật khẩu thành công");
-      navigate("/profile");
+      setErrorMsg("Looks like you entered the wrong new password");
     }
+  };
+
+  const validatePassword = (newPassword, confirmPassword) => {
+    return newPassword === confirmPassword;
   };
 
   return (
@@ -55,7 +72,7 @@ const Password = () => {
             <div className="faj-center" style={{ width: "70%" }}>
               <input
                 className="password"
-                placeholder="New password"
+                placeholder="Old password"
                 type="text"
                 style={{
                   width: "80%",
@@ -67,9 +84,26 @@ const Password = () => {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
-                value={password}
               />
             </div>
+            <div className="faj-center" style={{ width: "70%" }}>
+              <input
+                className="password"
+                placeholder="New password"
+                type="text"
+                style={{
+                  width: "80%",
+                  padding: "0 12px",
+                  border: "none",
+                  outline: "none",
+                  borderBottom: "1px solid #B0906F",
+                }}
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
+              />
+            </div>
+
             <div className="faj-center" style={{ width: "70%" }}>
               <input
                 className="newpassword"
@@ -83,22 +117,20 @@ const Password = () => {
                   borderBottom: "1px solid #B0906F",
                 }}
                 onChange={(e) => {
-                  setNewPassword(e.target.value);
+                  setConfirmPassword(e.target.value);
                 }}
-                value={newPassword}
               />
             </div>
-            <div
-              className="MessageError"
-              style={{ position: "relative", display: "none" }}
-            >
-              <label
-                style={{ margin: "8px 0 16px", color: "red" }}
-                htmlFor="Password"
-              >
-                Looks like you entered the wrong new password
-              </label>
-            </div>
+            {errorMsg && errorMsg !== "" && (
+              <div className="MessageError" style={{ position: "relative" }}>
+                <label
+                  style={{ marginBottom: "16px", color: "red" }}
+                  htmlFor="Password"
+                >
+                  {errorMsg}
+                </label>
+              </div>
+            )}
 
             <Button
               style={{

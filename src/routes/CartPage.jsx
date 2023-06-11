@@ -10,7 +10,7 @@ import Button from "react-bootstrap/esm/Button";
 import CardBox from "../components/CardBox";
 import { axios } from "../api/config";
 import { useCart } from "../Context/Cart.context";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { formatCostNumber } from "../utils/helper";
 import { extraDeliveryCost } from "../utils/constant";
 import { useNotification } from "../Context/Notification.context";
@@ -32,7 +32,6 @@ const CartPage = () => {
     amountCart,
   } = useCart();
   const { stompClient } = useNotification();
-
   const checkboxAll = useRef();
 
   const navigate = useNavigate();

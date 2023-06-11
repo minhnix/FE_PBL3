@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import NavbarMenu from "../components/NavbarMenu";
 import Footer from "../components/Footer";
@@ -17,6 +17,28 @@ const OrderDetail = () => {
   const token = localStorage.getItem("token");
 
   const nav = useNavigate();
+
+  const handleReOrder = async () => {
+    console.log(order);
+    const requests = order.orderDetails.map((item) => {
+      return createCart({
+        menuId: item.menuId,
+        quantity: item.quantity,
+        size: item.menuSize,
+      });
+    });
+    Promise.all(requests);
+  };
+
+  const createCart = async (cart) => {
+    console.log("🚀 ~ createCart ~ cart:", cart);
+    axios.post("http://localhost:8080/api/v1/carts", cart, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+  };
+
   useEffect(() => {
     axios
       .get("orders/" + id, {
@@ -101,6 +123,11 @@ const OrderDetail = () => {
                   <li>Discount : {formatCostNumber(order?.amountDiscount)}</li>
                   <li>Total : {formatCostNumber(order?.totalCost)}</li>
                 </ul>
+                <Link to="/cart" reloadDocument>
+                  <button onClick={handleReOrder} style={{}}>
+                    Đặt lại
+                  </button>
+                </Link>
               </div>
             </div>
           </Col>
