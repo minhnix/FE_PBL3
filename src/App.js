@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode";
 import "./App.css";
 import { useNotification } from "./Context/Notification.context";
 import { Suspense, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 import { over } from "stompjs";
 import { NotificationToast } from "./components/NotificationToast";
@@ -100,7 +100,6 @@ function App() {
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/forgot" element={<Forgot />}></Route>
-          <Route path="/reset" element={<Reset />}></Route>
           <Route path="/not-found" element={<NotFound></NotFound>}></Route>
         </Routes>
       </Suspense>

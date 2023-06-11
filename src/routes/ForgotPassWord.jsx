@@ -6,59 +6,23 @@ import Image from "react-bootstrap/esm/Image";
 import { Link, useNavigate } from "react-router-dom";
 
 import { axios } from "../api/config";
+import { toast } from "react-toastify";
 
 const Forgot = () => {
-  const [username, setUsername] = useState("");
-  const [code, setCode] = useState("");
-  const [error, setError] = useState({});
-  const navigate = useNavigate();
-  const handleShowPassword = () => {
-    document.querySelector("#Password").type === "text"
-      ? (document.querySelector("#Password").type = "password")
-      : (document.querySelector("#Password").type = "text");
-  };
-  const [action, setAction] = useState("email");
-  const handleSendEmail = () => {
-    const codeInput = document.querySelector(".Code");
-    codeInput.style.display = "block";
-    const emailInput = document.querySelector(".Email");
-    emailInput.style.display = "none";
-    const error = document.querySelector(".MessageError");
-    // email.style.display = "none";
-    if (codeInput.style.display === "block" && action === "code") {
-      //code to reset password
-      if (code !== "1") {
-        error.style.display = "block";
-      } else {
-        error.style.display = "none";
-        navigate("/reset");
-      }
-    }
-    if (codeInput.style.display === "block" && action === "email") {
-      setAction("code");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await axios.post(`/auth/reset-password?email=${email}`);
+      setLoading(false);
+      toast.success("Mật khẩu đã gửi đến email của bạn");
+    } catch (err) {
+      toast.error("Không tìm thấy email!!!");
+      setLoading(false);
     }
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const body = {
-  //     usernameOrEmail: username,
-  //     password,
-  //   };
-  //   const res = await axios
-  //     .post("/auth/login", body)
-  //     .then((response) => response)
-  //     .catch((error) => error.response);
-  //   if (res.status === 200) {
-  //     localStorage.setItem("token", res.data.accessToken);
-  //     navigate("/");
-  //     window.location.reload();
-  //   } else if (res.status === 401) {
-  //     setError(res.data);
-  //   } else if (res.status === 400) {
-  //     setError(res.data);
-  //   }
-  // };
 
   return (
     <>
@@ -70,8 +34,6 @@ const Forgot = () => {
                 Forget password
               </h1>
               <div
-                // onSubmit={(e) => handleSubmit(e)}
-                // action=""
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -81,7 +43,7 @@ const Forgot = () => {
               >
                 <div className="form-input-box">
                   <div className="Email" style={{ position: "relative" }}>
-                    <label style={{ position: "absolute" }} htmlFor="Username">
+                    <label style={{ position: "absolute" }} htmlFor="email">
                       <i
                         style={{ marginRight: "12px" }}
                         class="bi bi-person-circle"
@@ -89,61 +51,20 @@ const Forgot = () => {
                       Please enter your email
                     </label>
                     <input
-                      onChange={(e) => setUsername(e.target.value)}
-                      type="text"
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
                       name=""
                       style={{
                         width: "100%",
-                        marginTop: "24px",
+                        marginTop: "30px",
                         padding: "0px 12px",
                       }}
-                      placeholder="Enter your username"
-                      id="Username"
+                      placeholder="Enter your email"
+                      id="email"
                     />
-                    <span style={{ color: "#FA9884" }}>
-                      {error.usernameOrEmail ||
-                        (error?.message ? error?.message : null)}
-                    </span>
-                  </div>
-                  <div
-                    className="Code"
-                    style={{ position: "relative", display: "none" }}
-                  >
-                    <label style={{ position: "absolute" }} htmlFor="Password">
-                      <i style={{ marginRight: "12px" }} class="bi bi-lock"></i>
-                      Please check your emails for a message with your code
-                    </label>
-                    <input
-                      onChange={(e) => setCode(e.target.value)}
-                      name=""
-                      style={{
-                        width: "100%",
-                        marginTop: "80px",
-                        padding: "0px 12px",
-                      }}
-                      placeholder="Enter your code here..."
-                      id="Password"
-                      required
-                    />
-                    <span style={{ color: "#FA9884" }}>
-                      {error.password ||
-                        (error?.message ? error?.message : null)}
-                    </span>
-                  </div>
-                  <div
-                    className="MessageError"
-                    style={{ position: "relative", display: "none" }}
-                  >
-                    <label style={{ color: "red" }} htmlFor="Password">
-                      Looks like you entered the wrong code
-                    </label>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    handleSendEmail();
-                  }}
-                >
+                <button disabled={loading} onClick={handleSubmit}>
                   <i class="bi bi-arrow-right"></i>
                 </button>
                 <div style={{ marginTop: "24px" }}>
